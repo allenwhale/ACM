@@ -2,54 +2,54 @@ const int MAXN=1010;
 const int MAXM=1010;
 struct Matrix
 {
-    int n,m;
-    int a[MAXN][MAXM];
-    void clear()
-    {
-	n=m=0;
-	memset(a,0,sizeof(a));
-    }
-    Matrix operator + (const Matrix& b)const
-    {
-	Matrix tmp;
-	tmp.n=n,tmp.m=m;
-	for(int i=0;i<n;i++)
+	int n,m;
+	int a[MAXN][MAXM];
+	void clear()
 	{
-	    for(int j=0;j<m;j++)
-	    {
-		tmp.a[i][j]=a[i][j]+b.a[i][j];
-	    }
+		n=m=0;
+		memset(a,0,sizeof(a));
 	}
-	return tmp;
-    }
-    Matrix operator - (const Matrix& b)const
-    {
-	Matrix tmp;
-	tmp.n=n,tmp.m=m;
-	for(int i=0;i<n;i++)
+	Matrix operator + (const Matrix& a)const
 	{
-	    for(int j=0;j<m;j++)
-	    {
-		tmp.a[i][j]=a[i][j]-b.a[i][j];
-	    }
-	}
-	return tmp;
-    }
-    Matrix operator * (const Matrix& b)const
-    {
-	Matrix tmp;
-	tmp.clear();
-	tmp.n=n,tmp.m=m;
-	for(int i=0;i<n;i++)
-	{
-	    for(int j=0;j<m;j++)
-	    {
-		for(int k=0;k<m;k++)
+		Matrix tmp;
+		tmp.n=n,tmp.m=m;
+		for(int i=0;i<n;i++)
 		{
-		    tmp.a[i][j]+=(a[i][k]*b.a[k][j]);
+			for(int j=0;j<m;j++)
+			{
+				tmp.a[i][j]=a[i][j]+a.a[i][j];
+			}
 		}
-	    }
+		return tmp;
 	}
-	return tmp;
-    }
+	Matrix operator - (const Matrix& a)const
+	{
+		Matrix tmp;
+		tmp.n=n,tmp.m=m;
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<m;j++)
+			{
+				tmp.a[i][j]=a[i][j]-a.a[i][j];
+			}
+		}
+		return tmp;
+	}
+	Matrix operator * (const Matrix& a)const
+	{
+		Matrix tmp;
+		tmp.clear();
+		tmp.n=n,tmp.m=m;
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<m;j++)
+			{
+				for(int k=0;k<m;k++)
+				{
+					tmp.a[i][j]+=(a[i][k]*a.a[k][j]);
+				}
+			}
+		}
+		return tmp;
+	}
 };
