@@ -173,58 +173,43 @@ public:
         }
     }
 };
-void add_edge(Graph<Edge> &G, int a, int b){
-    G.add_edge(a, Edge(b));
-    G.add_edge(b, Edge(a));
+template<class G>
+void add_edge(G &g, int a, int b){
+    g.add_edge(a, Edge(b));
+    g.add_edge(b, Edge(a));
 }
 int main(){
-    Graph<Edge> G(5);
-    /*
-    add_edge(G, 0, 1);
-    add_edge(G, 0, 2);
-    add_edge(G, 0, 3);
-    add_edge(G, 1, 4);
-    add_edge(G, 1, 2);
-    add_edge(G, 4, 3);
-    G.cut_bridge();
-
-    for(int i=0;i<G.N;i++)
-        printf("%d %d\n", i, (int)G.cut[i]);
-    for(int i=0;i<G.N;i++)
-        for(int j=0;j<G.N;j++)
-            if(G.bridge[i][j])
-                printf("E(%d, %d) = %d\n", i, j, (int)G.bridge[i][j]);
-
-    G.BCC();
-    printf("BCC\n");
-    for(auto l: G.bcc){
-        for(auto ll: l){
-            printf("%d ", ll);
-        }
-        puts("");
+    int N, M;
+    scanf("%d %d", &N, &M);
+    Graph<Edge> G(N);
+    for(int i=0;i<M;i++){
+        int a, b;
+        scanf("%d %d", &a, &b);
+        a--, b--;
+        G.add_edge(a, Edge(b));
     }
-    G.add_edge(0, Edge(1));
-    G.add_edge(2, Edge(0));
-    G.add_edge(0, Edge(3));
-    G.add_edge(1, Edge(2));
-    G.add_edge(2, Edge(4));
-    G.add_edge(3, Edge(4));
-    G.add_edge(4, Edge(3));
     G.SCC();
-    printf("SCC\n");
+    vector<int> out(G.scc_cnt+1, 0);
     for(int i=0;i<G.N;i++)
-        printf("%d %d\n", i, G.scc[i]);
-    */
-    G.add_edge(0, Edge(1));
-    G.add_edge(0, Edge(2));
-    G.add_edge(0, Edge(3));
-    G.add_edge(1, Edge(2));
-    G.add_edge(2, Edge(3));
-    G.add_edge(3, Edge(4));
-    G.Toposort();
-    for(auto t: G.toposort)
-        printf("%d ", t);
-
+        for(int j=0;j<(int)G.vc[i].size();j++)
+            if(G.scc[i] != G.scc[G.vc[i][j].to])
+                out[G.scc[i]]++;
+    int r = -1;
+    for(int i=0;i<G.scc_cnt;i++){
+        if(out[i] == 0){
+            if(r == -1)
+                r = i;
+            else{
+                r = -1;
+                break;
+            }
+        }
+    }
+    int ans = 0;
+    for(int i=0;i<G.N;i++)
+        if(G.scc[i] == r)
+            ans++;
+    printf("%d\n", ans);
 
     return 0;
 }
