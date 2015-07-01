@@ -180,53 +180,30 @@ void add_edge(G &g, int a, int b){
     g.add_edge(b, Edge(a));
 }
 int main(){
-    Graph<Edge> G(5);
-    /*
-    add_edge(G, 0, 1);
-    add_edge(G, 0, 2);
-    add_edge(G, 0, 3);
-    add_edge(G, 1, 4);
-    add_edge(G, 1, 2);
-    add_edge(G, 4, 3);
-    G.cut_bridge();
-
-    for(int i=0;i<G.N;i++)
-        printf("%d %d\n", i, (int)G.cut[i]);
-    for(int i=0;i<G.N;i++)
-        for(int j=0;j<G.N;j++)
-            if(G.bridge[i][j])
-                printf("E(%d, %d) = %d\n", i, j, (int)G.bridge[i][j]);
-
-    G.BCC();
-    printf("BCC\n");
-    for(auto l: G.bcc){
-        for(auto ll: l){
-            printf("%d ", ll);
+    int N;
+    char in[1000];
+    while(~scanf("%d%*c", &N) && N){
+        Graph<Edge> G(N);
+        while(gets(in)){
+            char *ptr = strtok(in, " ");
+            int v;
+            sscanf(ptr, "%d", &v);
+            if(v == 0) break;
+            v--;
+            ptr = strtok(NULL, " ");
+            while(ptr){
+                int tmp;
+                sscanf(ptr, "%d", &tmp);
+                tmp--;
+                add_edge(G, v, tmp);
+                ptr = strtok(NULL, " ");
+            }
         }
-        puts("");
+        G.cut_bridge();
+        int ans = 0;
+        for(int i=0;i<N;i++)
+            ans += (int)G.cut[i];
+        printf("%d\n", ans);
     }
-    G.add_edge(0, Edge(1));
-    G.add_edge(2, Edge(0));
-    G.add_edge(0, Edge(3));
-    G.add_edge(1, Edge(2));
-    G.add_edge(2, Edge(4));
-    G.add_edge(3, Edge(4));
-    G.add_edge(4, Edge(3));
-    G.SCC();
-    printf("SCC\n");
-    for(int i=0;i<G.N;i++)
-        printf("%d %d\n", i, G.scc[i]);
-    */
-    G.add_edge(0, Edge(1));
-    G.add_edge(0, Edge(2));
-    G.add_edge(0, Edge(3));
-    G.add_edge(1, Edge(2));
-    G.add_edge(2, Edge(3));
-    G.add_edge(3, Edge(4));
-    G.Toposort();
-    for(auto t: G.toposort)
-        printf("%d ", t);
-
-
     return 0;
 }

@@ -79,13 +79,15 @@ public:
         }
     }
 
-    void _BBC(int x, int d){
+    void _BCC(int x, int f, int d){
         stk[++top] = x;
         dfn[x] = low[x] = d;
         for(int i=0;i<(int)vc[x].size();i++){
             E e = vc[x][i];
+            if(e.to == f) continue;
             if(dfn[e.to] == -1){
-                _BBC(e.to, d+1);
+                _BCC(e.to, x, d+1);
+                low[x] = min(low[x], low[e.to]);
                 if(low[e.to] >= dfn[x]){
                     vector<int> l;
                     do{
@@ -97,7 +99,6 @@ public:
                     l.push_back(x);
                     bcc.push_back(l);
                 }
-                low[x] = min(low[x], low[e.to]);
             }else low[x] = min(low[x], dfn[e.to]);
         }
     }
@@ -110,7 +111,7 @@ public:
         top = -1;
         for(int i=0;i<N;i++)
             if(dfn[i] == -1)
-                _BBC(i, 0);
+                _BCC(i, -1, 0);
     }
     
     void _SCC(int x, int d){
@@ -129,7 +130,6 @@ public:
         }
         if(low[x] == dfn[x]){
             while(stk[top] != x){
-                printf("top %d\n", stk[top]);
                 scc[stk[top]] = scc_cnt;
                 vis[stk[top]] = 2;
                 top--;
@@ -174,59 +174,63 @@ public:
         }
     }
 };
-template<class G>
-void add_edge(G &g, int a, int b){
+void add_edge(Graph<Edge> &g, int a, int b){
     g.add_edge(a, Edge(b));
     g.add_edge(b, Edge(a));
 }
-int main(){
-    Graph<Edge> G(5);
-    /*
-    add_edge(G, 0, 1);
-    add_edge(G, 0, 2);
-    add_edge(G, 0, 3);
-    add_edge(G, 1, 4);
-    add_edge(G, 1, 2);
-    add_edge(G, 4, 3);
-    G.cut_bridge();
-
-    for(int i=0;i<G.N;i++)
-        printf("%d %d\n", i, (int)G.cut[i]);
-    for(int i=0;i<G.N;i++)
-        for(int j=0;j<G.N;j++)
-            if(G.bridge[i][j])
-                printf("E(%d, %d) = %d\n", i, j, (int)G.bridge[i][j]);
-
-    G.BCC();
-    printf("BCC\n");
-    for(auto l: G.bcc){
-        for(auto ll: l){
-            printf("%d ", ll);
+bool odd_cycle(Graph<Edge> &G, vector<int> &bcc){
+    vector<bool> in(G.N+1, false);
+    vector<int> color(G.N+1, -1);
+    for(int i=0;i<(int)bcc.size();i++)
+        in[bcc[i]] = true;
+    queue<int> q;
+    q.push(bcc[0]);
+    color[bcc[0]] = 1;
+    while(!q.empty()){
+        int t = q.front();
+        q.pop();
+        for(int i=0;i<(int)G.vc[t].size();i++){
+            Edge e = G.vc[t][i];
+            if(in[e.to] == false) continue;
+            if(color[e.to] != -1 && color[e.to] == color[t])
+                return false;
+            if(color[e.to] == -1){
+                color[e.to] = color[t] ^ 1;
+                q.push(e.to);
+            }
         }
-        puts("");
     }
-    G.add_edge(0, Edge(1));
-    G.add_edge(2, Edge(0));
-    G.add_edge(0, Edge(3));
-    G.add_edge(1, Edge(2));
-    G.add_edge(2, Edge(4));
-    G.add_edge(3, Edge(4));
-    G.add_edge(4, Edge(3));
-    G.SCC();
-    printf("SCC\n");
-    for(int i=0;i<G.N;i++)
-        printf("%d %d\n", i, G.scc[i]);
-    */
-    G.add_edge(0, Edge(1));
-    G.add_edge(0, Edge(2));
-    G.add_edge(0, Edge(3));
-    G.add_edge(1, Edge(2));
-    G.add_edge(2, Edge(3));
-    G.add_edge(3, Edge(4));
-    G.Toposort();
-    for(auto t: G.toposort)
-        printf("%d ", t);
-
-
+    return true;
+}
+int RG[1010][1010];
+int main(){
+    int N, M;
+    while(~scanf("%d %d", &N, &M) && N && M){
+        vector<bool> odd(N+1, false);
+        memset(RG, true, sizeof(RG));
+        Graph<Edge> G(N);
+        for(int i=0;i<M;i++){
+            int a, b;
+            scanf("%d %d", &a, &b);
+            a--, b--;
+            RG[a][b] = RG[b][a] = false;
+        }
+        for(int i=0;i<N;i++)
+            for(int j=0;j<N;j++)
+                if(i != j && RG[i][j])
+                    G.add_edge(i, Edge(j));
+        G.BCC();
+        int ans = 0;
+        for(int i=0;i<(int)G.bcc.size();i++){
+            vector<int> vc = G.bcc[i];
+            if((int)vc.size()>=3&&!odd_cycle(G, vc)){
+                for(int j=0;j<(int)vc.size();j++)
+                    odd[vc[j]] = true;
+            }
+        }
+        for(int i=0;i<N;i++)
+            ans += (!odd[i]);
+        printf("%d\n", ans);
+    }
     return 0;
 }
