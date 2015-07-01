@@ -28,6 +28,12 @@ public:
     vector<int> bcc_seq;
     vector<int>stk;
     int top;
+    /* for SCC */
+    //vector<int> dfn, low;
+    //vector<int>stk;
+    //int top;
+    vector<int> scc;
+    int scc_cnt;
 
     void add_edge(int f, E e){
         vc[f].push_back(e);
@@ -97,11 +103,49 @@ public:
         dfn = low = vector<int>(N+1, -1);
         bcc = vector<vector<int> >();
         bcc_seq = vector<int>(N+1);
-        stk = vector<int>(N+1);
+        stk = vector<int>(N+1, -1);
         top = -1;
         for(int i=0;i<N;i++)
             if(dfn[i] == -1)
                 _BBC(i, 0);
+    }
+    
+    void _SCC(int x, int d){
+        stk[++top] = x;
+        dfn[x] = low[x] = d;
+        vis[x] = 1;
+        for(int i=0;i<(int)vc[x].size();i++){
+            E e = vc[x][i];
+            if(dfn[e.to] != -1){
+                if(vis[e.to] == 1)
+                    low[x] = min(low[x], dfn[e.to]);
+            }else{
+                _SCC(e.to, d+1);
+                low[x] = min(low[x], low[e.to]);
+            }
+        }
+        if(low[x] == dfn[x]){
+            while(stk[top] != x){
+                printf("top %d\n", stk[top]);
+                scc[stk[top]] = scc_cnt;
+                vis[stk[top]] = 2;
+                top--;
+            }
+            scc[stk[top]] = scc_cnt++;
+            vis[stk[top]] = 2;
+            top--;
+        }
+    }
+    void SCC(){
+        dfn = low = vector<int>(N+1, -1);
+        vis = vector<int>(N+1, 0);
+        scc = vector<int>(N+1, 0);
+        scc_cnt = 1;
+        stk = vector<int>(N+1, -1);
+        top = -1;
+        for(int i=0;i<N;i++)
+            if(dfn[i] == -1)
+                _SCC(i, 0);
     }
 };
 template<class G>
@@ -111,12 +155,13 @@ void add_edge(G &g, int a, int b){
 }
 int main(){
     Graph<Edge> G(5);
+    /*
     add_edge(G, 0, 1);
     add_edge(G, 0, 2);
     add_edge(G, 0, 3);
     add_edge(G, 1, 4);
     add_edge(G, 1, 2);
-    //add_edge(G, 4, 3);
+    add_edge(G, 4, 3);
     G.cut_bridge();
 
     for(int i=0;i<G.N;i++)
@@ -134,6 +179,18 @@ int main(){
         }
         puts("");
     }
+    */
+    G.add_edge(0, Edge(1));
+    G.add_edge(2, Edge(0));
+    G.add_edge(0, Edge(3));
+    G.add_edge(1, Edge(2));
+    G.add_edge(2, Edge(4));
+    G.add_edge(3, Edge(4));
+    G.add_edge(4, Edge(3));
+    G.SCC();
+    printf("SCC\n");
+    for(int i=0;i<G.N;i++)
+        printf("%d %d\n", i, G.scc[i]);
 
     return 0;
 }
