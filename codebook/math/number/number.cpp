@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <algorithm>
 using namespace std;
 typedef long long ll;
 #define EPS 1e-10
@@ -221,38 +222,41 @@ vector<Complex> FFT(vector<Complex> a, int sz, int flag=1){
     return res;
 }
 
+// max 12!
+int factorial[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600};
+vector<int> idx2permutation(int x, int n){
+    vector<bool> used(n+1, false);
+    vector<int> res(n);
+    for(int i=0;i<n;i++){
+        int tmp = x / factorial[n-i-1];
+        int j;
+        for(j=1;j<=n;j++)if(!used[j]){
+            if(tmp == 0) break;
+            tmp--;
+        }
+        res[i] = j, used[j] = true;
+        x %= factorial[n-i-1];
+    }
+    return res;
+}
+
+int permutation2idx(vector<int> a){
+    int res = 0;
+    for(int i=0;i<(int)a.size();i++){
+        int tmp = a[i] - 1;
+        for(int j=0;j<i;j++)
+            if(a[j] < a[i]) tmp--;
+        res += factorial[(int)a.size()-i-1] * tmp;
+    }
+    return res;
+}
+
 
 int main(){
     srand(time(0));
-    vector<Complex> a(4);
-    vector<Complex> b(4);
-    for(int i=0;i<2;i++){
-        a[i] = (Complex(rand()%10, 0));
-        b[i] = (Complex(rand()%10, 0));
-    }
-    vector<Complex> c(4);
-    for(int i=0;i<2;i++){
-        for(int j=0;j<2;j++)
-            c[i+j] += a[i] * b[j];
-    }
-    printf("AAA\n");
-    for(auto aa: a)
-        cout << aa << endl;
-    printf("BBB\n");
-    for(auto bb: b)
-        cout << bb << endl;
-    printf("CCC\n");
-    for(auto cc: c)
-        cout << cc << endl;
-    vector<Complex> ffta = FFT(a, 4);
-    vector<Complex> fftb = FFT(b, 4);
-    vector<Complex> fftc(4);
-    for(int i=0;i<4;i++)
-        fftc[i] = (ffta[i] * fftb[i]) / 4.0;
-    vector<Complex> ans = FFT(fftc, 4, -1);
-    printf("ANS\n");
-    for(auto aa: ans)
-        cout << aa << endl;
-    
-
+    vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    random_shuffle(a.begin(), a.end());
+    for(auto _: a)
+        printf("%d\n", _);
+    printf("test = %d\n", idx2permutation(permutation2idx(a), a.size()) == a);
 }
