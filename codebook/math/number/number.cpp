@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <vector>
 #include <math.h>
+#include <complex>
+#include <stdlib.h>
+#include <time.h>
+#include <iostream>
 using namespace std;
 typedef long long ll;
+#define EPS 1e-10
+#define INF 1e15
+typedef complex<double> Complex;
+const double pi = acos(-1);
 
 ll ext_gcd(ll a,ll b,ll &x,ll &y){
     ll d=a;
@@ -120,9 +128,21 @@ public:
     vector<double> coef;
     double operator () (const double &rhs) const {
         double res = 0.0;
-        for(int i=0;i<(int)coef.size();i++)
-            res += pow(rhs, i) * coef[i];
+        double e = 1.0;
+        for(int i=0;i<(int)coef.size();i++,e*=rhs)
+            res += e * coef[i];
         return res;
+    }
+    
+    Function derivative() const {
+        vector<double> dc((int)this->coef.size()-1);
+        for(int i=0;i<(int)dc.size();i++)
+            dc[i] = coef[i+1] * (i+1);
+        return Function(dc);
+    }
+
+    int degree() const {
+        return (int)coef.size()-1;
     }
 };
 
@@ -137,9 +157,102 @@ double simpson(const T &f, double a, double b, int n){
     return ans * h / 3;
 }
 
+int sign(double x){
+    return x < -EPS ? -1 : x > EPS;
+}
+
+template<class T>
+double find(const T &f, double lo, double hi){
+    int sign_lo, sign_hi;
+    if((sign_lo=sign(f(lo))) == 0) return lo;
+    if((sign_hi=sign(f(hi))) == 0) return hi;
+    if(sign_hi * sign_lo > 0) return INF;
+    for(int i=0;i<100&&hi-lo>EPS;i++){
+        double m = (hi+lo) / 2;
+        int sign_mid = sign(f(m));
+        if(sign_mid == 0) return m;
+        if(sign_lo * sign_mid < 0)
+            hi = m;
+        else lo = m;
+    }
+    return (lo+hi) / 2;
+}
+
+template<class T>
+vector<double> eqation(const T &f){
+    vector<double> res;
+    if(f.degree() == 1){
+        if(sign(f.coef[1]))res.push_back(-f.coef[0]/f.coef[1]);
+        return res;
+    }
+    vector<double> droot = eqation(f.derivative());
+    droot.insert(droot.begin(), -INF);
+    droot.push_back(INF);
+    for(int i=0;i<(int)droot.size()-1;i++){
+        double tmp = find(f, droot[i], droot[i+1]);
+        if(tmp < INF) res.push_back(tmp);
+    }
+    return res;
+}
+
+vector<Complex> reverse(vector<Complex> a, int sz){
+    vector<Complex> res(a);
+    for (int i=1,j=0;i<sz;i++){
+        for(int k=sz>>1;!((j^=k)&k);k>>=1);
+        if(i > j) swap(res[i], res[j]);
+    }
+    return res;
+}
+
+vector<Complex> FFT(vector<Complex> a, int sz, int flag=1){
+    vector<Complex> res = reverse(a, sz);
+    for(int k=2;k<=sz;k<<=1){
+        double p0 = -pi / (k>>1) * flag;
+        Complex unit_p0(cos(p0), sin(p0));
+        for(int j=0;j<sz;j+=k){
+            Complex unit(1.0, 0.0);
+            for(int i=j;i<j+k/2;i++,unit*=unit_p0){
+                Complex t1 = res[i], t2 = res[i+k/2] * unit;
+                res[i] = t1 + t2;
+                res[i+k/2] = t1 - t2;
+            }
+        }
+    }
+    return res;
+}
+
+
 int main(){
-    vector<double> c = {1, 2, 3, 4};
-    //2x+1
-    Function f(c);
-    printf("%f\n", simpson(f, 10, 1000, 100));
+    srand(time(0));
+    vector<Complex> a(4);
+    vector<Complex> b(4);
+    for(int i=0;i<2;i++){
+        a[i] = (Complex(rand()%10, 0));
+        b[i] = (Complex(rand()%10, 0));
+    }
+    vector<Complex> c(4);
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++)
+            c[i+j] += a[i] * b[j];
+    }
+    printf("AAA\n");
+    for(auto aa: a)
+        cout << aa << endl;
+    printf("BBB\n");
+    for(auto bb: b)
+        cout << bb << endl;
+    printf("CCC\n");
+    for(auto cc: c)
+        cout << cc << endl;
+    vector<Complex> ffta = FFT(a, 4);
+    vector<Complex> fftb = FFT(b, 4);
+    vector<Complex> fftc(4);
+    for(int i=0;i<4;i++)
+        fftc[i] = (ffta[i] * fftb[i]) / 4.0;
+    vector<Complex> ans = FFT(fftc, 4, -1);
+    printf("ANS\n");
+    for(auto aa: ans)
+        cout << aa << endl;
+    
+
 }
