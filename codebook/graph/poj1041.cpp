@@ -5,6 +5,7 @@
 #include <stack>
 #include <string.h>
 #include <queue>
+#include <map>
 using namespace std;
 typedef pair<int, int> PI;
 #define FF first
@@ -28,6 +29,9 @@ class Edge {
 public:
 	int to, w;
 	Edge(int t=0, int _w=0): to(t), w(_w) {}
+	bool operator < (const Edge &rhs) const {
+		return w < rhs.w;
+	}
 };
 class Graph {
 public:
@@ -145,19 +149,44 @@ public:
 		return true;
 	}
 };
-
+map<int, int> mp;
+int sn;
+int find(int x){
+	if(mp.find(x) == mp.end())
+		mp[x] = sn++;
+	return mp[x];
+}
+vector<pair<PI, int> >e;
 int main(){
-	Graph G(4);
-	G.add_edge(0, Edge(3, 3));
-	G.add_edge(3, Edge(0, 3));
-	G.add_edge(0, Edge(1, 0));
-	G.add_edge(1, Edge(0, 0));
-	G.add_edge(1, Edge(2, 1));
-	G.add_edge(2, Edge(1, 1));
-	G.add_edge(2, Edge(3, 2));
-	G.add_edge(3, Edge(2, 2));
-	printf("euler %d\n", G.EulerCircuit());
-	for(auto p: G.eulercircuit)
-		printf(" %d\n", p);
+	int x, y;
+	int flag = 0;
+	while(~scanf("%d %d", &x, &y)){
+		if(x == 0 && y == 0){
+			if(flag == 1) break;
+			flag = 1;
+			Graph G(sn);
+			for(int i=0;i<(int)e.size();i++){
+				pair<PI, int> ee = e[i];
+				G.add_edge(ee.FF.FF, Edge(ee.FF.SS, ee.SS));
+				G.add_edge(ee.FF.SS, Edge(ee.FF.FF, ee.SS));
+			}
+			if(G.EulerCircuit() == false)puts("Round trip does not exist.");
+			else{
+				for(int i=0;i<(int)G.eulercircuit.size();i++){
+					printf("%d%c", G.eulercircuit[i], i==G.eulercircuit.size()-1?'\n':' ');
+				}
+			}
+			mp.clear();
+			sn = 0;
+			e.clear();
+			continue;
+		}
+		int id;
+		scanf("%d", &id);
+		x = find(x); y = find(y);
+		e.push_back(pair<PI, int>(PI(x, y), id));
+		flag = 0;
+	}
 
+	return 0;
 }
