@@ -6,20 +6,18 @@
 #include <string.h>
 #include <queue>
 using namespace std;
-typedef pair<int, int> PI;
-#define FF first
-#define SS second
 class Edge {
 public:
     int to;
     Edge(int t=0): to(t){}
 };
 
+template<class E>
 class Graph {
 public:
     int N, M;
-    vector<vector<Edge> > vc;
-    Graph(int n=0): N(n), M(0), vc(vector<vector<Edge> >(N)){}
+    vector<vector<E> > vc;
+    Graph(int n=0): N(n), M(0), vc(vector<vector<E> >(N)){}
     vector<int> vis;
     /* for cut bridge */
     vector<bool> cut;
@@ -42,16 +40,22 @@ public:
 	/* for 2sat */
 	vector<int> twosatans;
 
-    void add_edge(int f, Edge e){
+    void add_edge(int f, E e){
         vc[f].push_back(e);
         M++;
+    }
+    int Node(){
+        return N;
+    }
+    int Edge(){
+        return M;
     }
     void _cut_bridge(int x, int f, int d){
         vis[x] = 1;
         dfn[x] = low[x] = d;
         int children = 0;
         for(int i=0;i<(int)vc[x].size();i++){
-            Edge e = vc[x][i];
+            E e = vc[x][i];
             if(e.to != f && vis[e.to] == 1)
                 low[x] = min(low[x], dfn[e.to]);
             if(vis[e.to] == 0){
@@ -81,7 +85,7 @@ public:
         stk[++top] = x;
         dfn[x] = low[x] = d;
         for(int i=0;i<(int)vc[x].size();i++){
-            Edge e = vc[x][i];
+            E e = vc[x][i];
             if(dfn[e.to] == -1){
                 _BBC(e.to, d+1);
                 if(low[e.to] >= dfn[x]){
@@ -116,7 +120,7 @@ public:
         dfn[x] = low[x] = d;
         vis[x] = 1;
         for(int i=0;i<(int)vc[x].size();i++){
-            Edge e = vc[x][i];
+            E e = vc[x][i];
             if(dfn[e.to] != -1){
                 if(vis[e.to] == 1)
                     low[x] = min(low[x], dfn[e.to]);
@@ -163,7 +167,7 @@ public:
             q.pop();
             toposort.push_back(v);
             for(int i=0;i<(int)vc[v].size();i++){
-                Edge e = vc[v][i];
+                E e = vc[v][i];
                 in_deg[e.to]--;
                 if(in_deg[e.to] == 0)
                     q.push(e.to);
@@ -208,6 +212,33 @@ public:
 	}
 };
 
+void add_edge(Graph<Edge> &G, int a, int b){
+    G.add_edge(a, Edge(b));
+    G.add_edge(b, Edge(a));
+}
 int main(){
+	int N, M;
+	scanf("%d %d", &N, &M);
+	Graph<Edge> G(N*4);
+	for(int i=1;i<=N;i++){
+		G.add_edge(2*i-1, Edge(2*i-2+2*N));
+		G.add_edge(2*i-2, Edge(2*i-1+2*N));
+		G.add_edge(2*i-1+2*N, Edge(2*i-2));
+		G.add_edge(2*i-2+2*N, Edge(2*i-1));
+	}
+	for(int i=0;i<M;i++){
+		int a, b;
+		scanf("%d %d", &a, &b);
+		a--, b--;
+		G.add_edge(a, Edge(b+2*N));
+		G.add_edge(b, Edge(a+2*N));
+	}
+	if(G.TwoSat() == false)puts("-1");
+	else{
+		for(int i=0;i<G.N/2;i++){
+			if(G.twosatans[i])
+				printf("%d\n", i+1);
+		}
+	}
     return 0;
 }

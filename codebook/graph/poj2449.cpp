@@ -14,6 +14,11 @@ public:
     int to;
     Edge(int t=0): to(t){}
 };
+class wEdge {
+public:
+	int to, w;
+	wEdge(int t=0, int _w=0): to(t), w(_w) {}
+};
 
 class Graph {
 public:
@@ -41,17 +46,25 @@ public:
     vector<int> toposort;
 	/* for 2sat */
 	vector<int> twosatans;
+	/* for dijkstra */
+	vector<int> dis;
 
-    void add_edge(int f, Edge e){
+    void add_edge(int f, E e){
         vc[f].push_back(e);
         M++;
+    }
+    int Node(){
+        return N;
+    }
+    int Edge(){
+        return M;
     }
     void _cut_bridge(int x, int f, int d){
         vis[x] = 1;
         dfn[x] = low[x] = d;
         int children = 0;
         for(int i=0;i<(int)vc[x].size();i++){
-            Edge e = vc[x][i];
+            E e = vc[x][i];
             if(e.to != f && vis[e.to] == 1)
                 low[x] = min(low[x], dfn[e.to]);
             if(vis[e.to] == 0){
@@ -81,7 +94,7 @@ public:
         stk[++top] = x;
         dfn[x] = low[x] = d;
         for(int i=0;i<(int)vc[x].size();i++){
-            Edge e = vc[x][i];
+            E e = vc[x][i];
             if(dfn[e.to] == -1){
                 _BBC(e.to, d+1);
                 if(low[e.to] >= dfn[x]){
@@ -116,7 +129,7 @@ public:
         dfn[x] = low[x] = d;
         vis[x] = 1;
         for(int i=0;i<(int)vc[x].size();i++){
-            Edge e = vc[x][i];
+            E e = vc[x][i];
             if(dfn[e.to] != -1){
                 if(vis[e.to] == 1)
                     low[x] = min(low[x], dfn[e.to]);
@@ -163,7 +176,7 @@ public:
             q.pop();
             toposort.push_back(v);
             for(int i=0;i<(int)vc[v].size();i++){
-                Edge e = vc[v][i];
+                E e = vc[v][i];
                 in_deg[e.to]--;
                 if(in_deg[e.to] == 0)
                     q.push(e.to);
@@ -206,8 +219,91 @@ public:
 		}
 		return true;
 	}
+	int Dijkstra(int s, int t){
+		const int INF = 0x3f3f3f3f;
+		dis = vector<int>(N+1, INF);
+		priority_queue<PI> pq;
+		dis[s] = 0;
+		pq.push(PI(0, s));
+		while(!pq.empty()){
+			PI v = pq.top();
+			pq.pop();
+			if(v.FF > dis[v.SS])continue;
+			if(v.SS == t)return dis[t];
+			for(int i=0;i<(int)vc[v.SS].size();i++){
+				E e = vc[v.SS][i];
+				if(dis[e.to] > dis[v.SS] + e.w){
+					dis[e.to] = dis[v.SS] + e.w;
+					pq.push(PI(dis[e.to], e.to));
+				}
+			}
+		}
+		return -1;
+	}
+	void AllDijkstra(int s){
+		const int INF = 0x3f3f3f3f;
+		dis = vector<int>(N+1, INF);
+		priority_queue<PI> pq;
+		dis[s] = 0;
+		pq.push(PI(0, s));
+		while(!pq.empty()){
+			PI v = pq.top();
+			pq.pop();
+			if(v.FF > dis[v.SS])continue;
+			for(int i=0;i<(int)vc[v.SS].size();i++){
+				E e = vc[v.SS][i];
+				if(dis[e.to] > dis[v.SS] + e.w){
+					dis[e.to] = dis[v.SS] + e.w;
+					pq.push(PI(dis[e.to], e.to));
+				}
+			}
+		}
+	}
+	int KthShortestPath(int s, int t, int k){
+		Graph<wEdge> RG(N);
+		for(int i=0;i<N;i++)
+			for(int j=0;j<(int)vc[i].size();j++){
+				E e = vc[i][j];
+				RG.add_edge(e.to, wEdge(i, e.w));
+			}
+		RG.AllDijkstra(t);
+		dis = RG.dis;
+		priority_queue<PI> pq;
+		pq.push(PI(-dis[s], s));
+		while(!pq.empty()){
+			PI v = pq.top();
+			pq.pop();
+			int real = -v.FF - dis[v.SS];
+			if(v.SS == t && (!(--k)))
+				return real;
+			for(int i=0;i<(int)vc[v.SS].size();i++){
+				E e = vc[v.SS][i];
+				pq.push(PI(-(real+e.w+dis[e.to]), e.to));
+			}
+		}
+		return -1;
+	}
 };
 
+void add_edge(Graph<Edge> &G, int a, int b){
+    G.add_edge(a, Edge(b));
+    G.add_edge(b, Edge(a));
+}
 int main(){
+	int N, M;
+	while(~scanf("%d %d", &N, &M)){
+		Graph<wEdge> G(N);
+		for(int i=0;i<M;i++){
+			int a, b, c;
+			scanf("%d %d %d", &a, &b, &c);
+			a--, b--;
+			G.add_edge(a, wEdge(b, c));
+		}
+		int s, t, k;
+		scanf("%d %d %d", &s, &t, &k);
+		s--, t--;
+		k += (s==t);
+		printf("%d\n", G.KthShortestPath(s, t, k));
+	}
     return 0;
 }

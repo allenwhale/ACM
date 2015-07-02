@@ -1,7 +1,15 @@
 CC=g++
-FLAGS=-std=c++11 -O2 -g
+FLAGS=-std=c++11 -O2 -g -Wall -Wextra
 
-all: graph.o
+path: path.o
+	$(CC) $(FLAGS) path.o -o path.out
+	#valgrind 
+	./path.out
+
+path.o: path.cpp
+	$(CC) $(FLAGS) -c path.cpp -o path.o
+
+graph: graph.o
 	$(CC) $(FLAGS) graph.o -o graph.out
 	#valgrind 
 	./graph.out
