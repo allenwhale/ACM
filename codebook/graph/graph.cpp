@@ -17,6 +17,7 @@ public:
 
 class Graph {
 public:
+	/* Node num = N, Edge num = M*/
     int N, M;
     vector<vector<Edge> > vc;
     Graph(int n=0): N(n), M(0), vc(vector<vector<Edge> >(N)){}
@@ -46,6 +47,8 @@ public:
         vc[f].push_back(e);
         M++;
     }
+
+	/* called by cut_bridge */
     void _cut_bridge(int x, int f, int d){
         vis[x] = 1;
         dfn[x] = low[x] = d;
@@ -66,6 +69,12 @@ public:
             }
         }
     }
+	/*
+	 * solve the cut and bridge
+	 * store answer in cut(vector<bool>) ans bridge(vector<vector<bool> >) 
+	 * cut[i] == true iff i-th node is cut
+	 * bridge[i][j] == true iff edge between i-th ans j-th is bridge
+	 */
     void cut_bridge(){
         vis = vector<int>(N+1, 0);
         dfn = low = vector<int>(N+1);
@@ -77,6 +86,7 @@ public:
         }
     }
 
+	/* called by BCC */
     void _BBC(int x, int d){
         stk[++top] = x;
         dfn[x] = low[x] = d;
@@ -87,11 +97,9 @@ public:
                 if(low[e.to] >= dfn[x]){
                     vector<int> l;
                     do{
-                        bcc_seq[stk[top]] = bcc.size();
                         l.push_back(stk[top]);
                         top--;
                     }while(stk[top+1] != e.to);
-                    bcc_seq[x] = bcc.size();
                     l.push_back(x);
                     bcc.push_back(l);
                 }
@@ -99,7 +107,12 @@ public:
             }else low[x] = min(low[x], dfn[e.to]);
         }
     }
-
+	/*
+	 * solve the biconnected components(BCC)
+	 * store answer in bcc(vector<vector<int> >)
+	 * bbc.size() is the number of BCC
+	 * bcc[i] is the sequence of a BCC
+	 */
     void BCC(){
         dfn = low = vector<int>(N+1, -1);
         bcc = vector<vector<int> >();
@@ -110,7 +123,8 @@ public:
             if(dfn[i] == -1)
                 _BBC(i, 0);
     }
-    
+
+	/* called by SCC */
     void _SCC(int x, int d){
         stk[++top] = x;
         dfn[x] = low[x] = d;
@@ -136,6 +150,12 @@ public:
             top--;
         }
     }
+	/*
+	 * solve the strongly connected component(SCC)
+	 * store answer in scc(vector<int>)
+	 * the value of scc[i] means the id of the SCC which i-th node in (id is based 0)
+	 * scc_cnt id the number of SCC
+	 */
     void SCC(){
         dfn = low = vector<int>(N+1, -1);
         vis = vector<int>(N+1, 0);
@@ -148,6 +168,10 @@ public:
                 _SCC(i, 0);
     }
 
+	/*
+	 * generate a toposort of graph
+	 * store in toposort
+	 */
     void Toposort(){
         toposort = vector<int>();
         vector<int> in_deg(N+1, 0);
@@ -170,12 +194,23 @@ public:
             }
         }
     }
+
+	/* 
+	 * called by TwoSat 
+	 * get the value of i-th
+	 * 1 = true, 0 = false, -1 = undefined
+	 */
 	int TwoSatGet(int x){
 		int r = x > N/2 ? x-N/2 : x;
 		if(twosatans[r] == -1)
 			return -1;
 		return x > N/2 ? !twosatans[r] : twosatans[r];
 	}
+	/*
+	 * solve the 2SAT
+	 * return true if there exists a set of answer
+	 * store the answer in twosatans
+	 */
 	bool TwoSat(){
 		SCC();
 		twosatans = vector<int>(N/2+1, -1);
