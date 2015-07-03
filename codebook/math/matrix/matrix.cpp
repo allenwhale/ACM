@@ -62,16 +62,18 @@ public:
                     res.at(i, j) += at(i, k) * rhs.at(k ,j);
         return res;
     }
-
-    void I() {
+	
+	/* make itself an identity matrix */
+    void Identity() {
         for(int i=0;i<R;i++)
             at(i, i) = 1;
     } 
-
+	
+	// A^rhs
     Matrix pow(int rhs) const {
         if(R != C) return Matrix();
         Matrix res(R, R), p(*this);
-        res.I();
+        res.Identity();
         while(rhs){
             if(rhs&1)res = res * p;
             p = p * p;
@@ -80,6 +82,12 @@ public:
         return res;
     }
 
+	/*
+	 * return guass eliminated matrix 
+	 * r will be chenged to the number of the non-free variables
+	 * l[i] will be set to true if i-th variable is not free
+	 * ignore flag
+	 */
     Matrix GuassElimination(int &r, vector<bool> &l, int flag=0) {
         l = vector<bool>(C);
         r = 0;
@@ -108,6 +116,11 @@ public:
         return res;
     }
 
+	/*
+	 * Ax = b
+	 * it will return the answer(x)
+	 * if row != column or there is any free variable, it will return an empty vector
+	 */
     vector<double> Solve(vector<double> a) {
         if(R != C) return vector<double>();
         vector<double> res(R);
@@ -130,6 +143,10 @@ public:
         return res;
     }
 
+	/*
+	 * return an inverse matrix
+	 * if row != column or the inverse matrix doesn't exist, it will return an empty matrix
+	 */
     Matrix Inverse() {
         if(R != C) return Matrix();
         Matrix t(R, R*2);
