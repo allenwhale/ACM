@@ -1,6 +1,14 @@
 CC=g++
 FLAGS=-std=c++11 -O2 -g -Wall -Wextra
 
+match: match.o
+	$(CC) $(FLAGS) match.o -o match.out
+	#valgrind 
+	./match.out
+
+match.o: match.cpp
+	$(CC) $(FLAGS) -c match.cpp -o match.o
+
 path: path.o
 	$(CC) $(FLAGS) path.o -o path.out
 	#valgrind 
