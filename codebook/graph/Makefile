@@ -1,6 +1,14 @@
 CC=g++
 FLAGS=-std=c++11 -O2 -g -Wall -Wextra
 
+tree: tree.o
+	$(CC) $(FLAGS) tree.o -o tree.out
+	#valgrind 
+	./tree.out
+
+tree.o: tree.cpp
+	$(CC) $(FLAGS) -c tree.cpp -o tree.o
+
 match: match.o
 	$(CC) $(FLAGS) match.o -o match.out
 	#valgrind 
