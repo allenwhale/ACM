@@ -141,13 +141,6 @@ public:
 	}
 };
 
-/*
- * Maximun General Graph Matching
- * store answer in m
- * Solve() returns the number of matching
- * important!!!
- * notice the order of disjoint set when unioning
- */
 class GMatch{
 public:
     int N;
@@ -244,9 +237,18 @@ public:
 };
 
 int main(){
-    GMatch m(5);
-    for(int i=0;i<5-1;i++)
-        m.add(i, (i+1)%5);
-    printf("%d\n", m.Solve());
+    int N;
+    scanf("%d", &N);
+    GMatch m(N);
+    int a, b;
+    while(~scanf("%d %d", &a, &b)){
+        a--, b--;
+        m.add(a, b);
+    }
+    printf("%d\n", m.Solve()*2);
+    for(int i=0;i<N;i++){
+        if(i < m.m[i])
+            printf("%d %d\n", i+1, m.m[i]+1);
+    }
 	return 0;
 }
