@@ -13,6 +13,7 @@ typedef long long ll;
 typedef complex<double> Complex;
 const double pi = acos(-1);
 
+/* extended GCD */
 ll ext_gcd(ll a,ll b,ll &x,ll &y){
     ll d=a;
     if(b!=0ll){
@@ -22,7 +23,11 @@ ll ext_gcd(ll a,ll b,ll &x,ll &y){
     else x=1ll,y=0ll;
     return d;
 }
-//ax%n=b
+
+/*
+ * ax = b (mod n)
+ * return a set of answer(vector<ll>) 
+ */
 vector<ll> line_mod_equation(ll a,ll b,ll n){
     ll x, y, d;
     d = ext_gcd(a, n, x, y);
@@ -35,13 +40,20 @@ vector<ll> line_mod_equation(ll a,ll b,ll n){
     }
     return ans;
 }
-#define P 24851
+
+/*
+ * find the inverse of n modular p
+ */
 ll mod_inverse(ll n, ll p){
     ll x, y;
     ll d = ext_gcd(n, p, x, y);
     return (p+x%p) % p;
 }
+
+/* P is the modular number */
+#define P 24851
 int fact[P+1];
+/* called by Cmod */
 int mod_fact(int n,int &e){
     e = 0;
     if(n == 0) return 1;
@@ -51,11 +63,16 @@ int mod_fact(int n,int &e){
         return res * (fact[n%P]%P);
     return res * ((P-fact[n%P])%P);
 }
+/*
+ * return C(n, m) mod P
+ */
 int Cmod(int n,int m){
+	/* this section only need to be done once */
     fact[0] = 1;
     for(int i=1;i<=P;i++){
         fact[i] = fact[i-1] * i%P;
     }
+	/* end */
     int a1, a2, a3, e1, e2, e3;
     a1 = mod_fact(n, e1);
     a2 = mod_fact(m, e2);
@@ -63,7 +80,13 @@ int Cmod(int n,int m){
     if(e1 > e2 + e3)return 0;
     return a1 * mod_inverse(a2 * (a3%P), P) % P;
 }
-//Chinese remainder theorem
+
+/*
+ * solve the chinese remainder theorem(CRT)
+ * if a.size() != m.size(), return -1
+ * return the minimun positive answer of CRT
+ * x = a[i] (mod m[i])
+ */
 int CRT(vector<int> a, vector<int> m) {
     if(a.size() != m.size()) return -1;
     int M = 1;
@@ -75,6 +98,7 @@ int CRT(vector<int> a, vector<int> m) {
     return (res + M) % M;
 }
 
+/* fast exponential */
 ll pow_mod(ll x, ll N, ll M) {
     ll res = 1;
     x %= M;
@@ -86,7 +110,8 @@ ll pow_mod(ll x, ll N, ll M) {
     return res;
 }
 
-bool prime_test(ll n, ll a, ll d) {
+/* called by MillerRabin */
+bool PrimeTest(ll n, ll a, ll d) {
     if(n == 2 || n == a) return true;
     if((n&1) == 0) return false;
     while((d&1) == 0) d >>= 1;
@@ -97,14 +122,19 @@ bool prime_test(ll n, ll a, ll d) {
     }
     return (t==n-1) || ((d&1)==1);
 }
-
-bool miller_rabin(ll n) {
+/* return true if n is a prime */
+bool MillerRabin(ll n){
+	// test set
     vector<ll> a = {2, 7 ,61};
     for(int i=0;i<(int)a.size();i++)
-        if(!prime_test(n, a[i], n-1)) return false;
+        if(!PrimeTest(n, a[i], n-1)) return false;
     return true;
 }
 
+/*
+ * gen phi from 1~MAXN
+ * store answer in phi
+ */
 #define MAXN 100
 int mindiv[MAXN], phi[MAXN], sum[MAXN];
 void genphi(){
@@ -123,10 +153,15 @@ void genphi(){
     }
 }
 
+/*
+ * class of polynomial function
+ * coef is the coefficient
+ * f(x) = sigma(c[i]*x^i)
+ */
 class Function {
 public:
-    Function(const vector<double> c=vector<double>()): coef(c){}
     vector<double> coef;
+    Function(const vector<double> c=vector<double>()): coef(c){}
     double operator () (const double &rhs) const {
         double res = 0.0;
         double e = 1.0;
@@ -147,6 +182,11 @@ public:
     }
 };
 
+/*
+ * calculate the integration of f(x) from a to b
+ * divided into n piece
+ * the bigger the n is, the more accurate the answer is
+ */
 template<class T>
 double simpson(const T &f, double a, double b, int n){
     double h = (b-a) / n;
@@ -158,10 +198,14 @@ double simpson(const T &f, double a, double b, int n){
     return ans * h / 3;
 }
 
+/* 
+ * called by find 
+ * 1 = positive, -1 = negative, 0 = zero
+ */
 int sign(double x){
     return x < -EPS ? -1 : x > EPS;
 }
-
+/* called by equation */
 template<class T>
 double find(const T &f, double lo, double hi){
     int sign_lo, sign_hi;
@@ -178,7 +222,9 @@ double find(const T &f, double lo, double hi){
     }
     return (lo+hi) / 2;
 }
-
+/*
+ * return a set of answer of f(x) = 0
+ */
 template<class T>
 vector<double> eqation(const T &f){
     vector<double> res;
@@ -196,21 +242,32 @@ vector<double> eqation(const T &f){
     return res;
 }
 
-vector<Complex> reverse(vector<Complex> a, int sz){
+/* 
+ * called by FFT 
+ * build the sequence of a that used to calculate FFT
+ * return a reversed sequence
+ */
+vector<Complex> reverse(vector<Complex> a){
     vector<Complex> res(a);
-    for (int i=1,j=0;i<sz;i++){
-        for(int k=sz>>1;!((j^=k)&k);k>>=1);
+    for (int i=1,j=0;i<(int)res.size();i++){
+        for(int k=((int)res.size())>>1;!((j^=k)&k);k>>=1);
         if(i > j) swap(res[i], res[j]);
     }
     return res;
 }
-
-vector<Complex> FFT(vector<Complex> a, int sz, int flag=1){
-    vector<Complex> res = reverse(a, sz);
-    for(int k=2;k<=sz;k<<=1){
+/*
+ * calculate the FFT of sequence
+ * a.size() must be 2^k
+ * flag = 1  -> FFT(a)
+ * falg = -1 -> FFT-1(a)
+ * return FFT(a) or FFT-1(a)
+ */
+vector<Complex> FFT(vector<Complex> a, int flag=1){
+    vector<Complex> res = reverse(a);
+    for(int k=2;k<=(int)res.size();k<<=1){
         double p0 = -pi / (k>>1) * flag;
         Complex unit_p0(cos(p0), sin(p0));
-        for(int j=0;j<sz;j+=k){
+        for(int j=0;j<(int)res.size();j+=k){
             Complex unit(1.0, 0.0);
             for(int i=j;i<j+k/2;i++,unit*=unit_p0){
                 Complex t1 = res[i], t2 = res[i+k/2] * unit;
@@ -222,7 +279,12 @@ vector<Complex> FFT(vector<Complex> a, int sz, int flag=1){
     return res;
 }
 
-// max 12!
+/*
+ * return the sequence of x-th of n!
+ * max(n) = 12
+ * 0 of 3! -> 123
+ * 5 of 3! -> 321
+ */
 int factorial[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600};
 vector<int> idx2permutation(int x, int n){
     vector<bool> used(n+1, false);
@@ -239,7 +301,12 @@ vector<int> idx2permutation(int x, int n){
     }
     return res;
 }
-
+/*
+ * a is x-th og n!
+ * return x(0~n!)
+ * 123 of 3! -> 0
+ * 321 of 3! -> 5
+ */
 int permutation2idx(vector<int> a){
     int res = 0;
     for(int i=0;i<(int)a.size();i++){
@@ -253,10 +320,4 @@ int permutation2idx(vector<int> a){
 
 
 int main(){
-    srand(time(0));
-    vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    random_shuffle(a.begin(), a.end());
-    for(auto _: a)
-        printf("%d\n", _);
-    printf("test = %d\n", idx2permutation(permutation2idx(a), a.size()) == a);
 }
