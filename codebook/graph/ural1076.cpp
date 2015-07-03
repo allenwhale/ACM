@@ -8,7 +8,7 @@ using namespace std;
  * BIpartite Matching
  * Nx = number of x nodes
  * Ny = number of y nodes
- * store matching answer in mx, my
+ * mx, my are the answer
  * Solve() returns the number of matching
  */
 class BiMatch{
@@ -49,11 +49,6 @@ public:
 	}
 };
 
-/*
- * solve Maximun Bipartite Matching
- * store matching answer in mx ,my
- * Solve() returns themaximun weight of perfect matching
- */
 class KM{
 public:
 #define FF first
@@ -122,5 +117,21 @@ public:
 };
 
 int main(){
+    int N;
+    scanf("%d", &N);
+    KM km(N, N);
+    for(int i=0;i<N;i++){
+        int tw = 0;
+        vector<int> tmp;
+        for(int j=0;j<N;j++){
+            int w;
+            scanf("%d", &w);
+            tw += w;
+            tmp.push_back(w);
+        }
+        for(int j=0;j<N;j++)
+            km.add(i, j, -(tw-tmp[j]));
+    }
+    printf("%d\n", -km.Solve());
 	return 0;
 }
