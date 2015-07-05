@@ -178,6 +178,7 @@ public:
 };
 /*
  * Minimun Directed Spanning Tree
+ * Solve() return answer of mdst if there exists else -1
  */
 class MDST{
 public:
