@@ -1,4 +1,8 @@
-#include <bits/stdc++.h>
+#include <stdio.h>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
 class LCA{
@@ -182,26 +186,30 @@ public:
 class MDST{
 public:
 #define v1  first.first
-#define v2  first.first
+#define v2  first.second
 #define w   second
-    const static int INF = 0x3f3f3f3f;
+#define INF 1e9
     typedef pair<int, int> PI;
-    typedef pair<PI, int> PII;
+    typedef pair<PI, double> PII;
     int N;
     vector<PII> E;
     MDST(int n=0): N(n){}
-    int Solve(int r){
+    void add_edge(int a, int b, double w){
+        E.push_back(PII(PI(a, b), w));
+    }
+    double Solve(int r){
         vector<bool> mrg(N+1, false);
-        vector<int>  dis(N+1, 0);
+        vector<double>  dis(N+1, 0);
         vector<int>  vis(N+1, 0);
         vector<int>  pre(N+1, 0);
         vector<int>  bln(N+1, 0);
-        int allw = 0, tmpw = 0;
+        double allw = 0, tmpw = 0;
         while(true){
             tmpw = 0;
             fill(dis.begin(), dis.end(), INF);
             fill(vis.begin(), vis.end(), -1);
             fill(bln.begin(), bln.end(), -1);
+            fill(pre.begin(), pre.end(), -1);
             for(int i=0;i<(int)E.size();i++){
                 PII e = E[i];
                 if(e.v1 != e.v2 && e.v2 != r && e.w < dis[e.v2])
@@ -210,7 +218,7 @@ public:
             bool tf = false;
             for(int i=0;i<N;i++){
                 if(mrg[i]) continue;
-                if(pre[i] == -1 && i != r) return -1;
+                if(pre[i] == -1 && i != r) return INF;
                 if(pre[i] != -1) tmpw += dis[i];
                 int s;
                 for(s=i;s!=-1&&vis[s]==-1;s=pre[s])
@@ -243,7 +251,29 @@ public:
         return allw + tmpw;
     }
 };
+typedef pair<double, double> PD;
+double dist(PD a, PD b){
+    return sqrt((a.first-b.first)*(a.first-b.first) + (a.second-b.second)*(a.second-b.second));
+}
+PD node[110];
 
 int main(){
+    int N, M;
+    while(~scanf("%d %d", &N, &M)){
+        MDST mdst(N);
+        for(int i=0;i<N;i++)
+            scanf("%lf %lf", &node[i].first, &node[i].second);
+        for(int i=0;i<M;i++){
+            int a, b;
+            scanf("%d %d", &a, &b);
+            a--, b--;
+            mdst.add_edge(a,b, dist(node[a], node[b]));
+        }
+        double ans = mdst.Solve(0);
+        if(ans == INF)
+            puts("poor snoopy");
+        else
+            printf("%.2f\n", ans);
+    }
     return 0;
 }
