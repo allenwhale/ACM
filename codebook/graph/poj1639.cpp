@@ -67,10 +67,6 @@ public:
 
 /*
  * Restricted MST
- * r = the node is limited
- * k = the limit
- * notice: <=k or ==k
- * Solve() returns value of rmst if there ia an answer else -1
  */
 class RMST{
 public:
@@ -171,7 +167,29 @@ public:
         return rmst;
     }
 };
-
+map<string, int> mp;
+int sn = 0;
+int find(string s){
+    if(mp.find(s) == mp.end())
+        mp[s] = sn++;
+    return mp[s];
+}
+char city[100005][2][20];
+int w[1000];
 int main(){
+    int M;
+    scanf("%d", &M);
+    for(int i=0;i<M;i++){
+        scanf("%s %s %d", city[i][0], city[i][1], &w[i]);
+        find(city[i][0]);
+        find(city[i][1]);
+    }
+    RMST rmst(sn);
+    for(int i=0;i<M;i++){
+        rmst.add_edge(find(city[i][0]), find(city[i][1]), w[i]);
+    }
+    int k;
+    scanf("%d", &k);
+    printf("Total miles driven: %d\n", rmst.Solve(find("Park"), k));
     return 0;
 }
