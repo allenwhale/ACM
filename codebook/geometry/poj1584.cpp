@@ -101,22 +101,48 @@ public:
         return out;
     }
 }nilLine(nilPoint, nilPoint);
-
+double R, X, Y;
+int N;
+Point p[2010];
+bool isconvex(){
+    for(int i=0;i<N;i++){
+        int a = i, b = (i+1) % N, c = (i+2) % N;
+        if(cmp((p[b]-p[a]).cross(p[c]-p[b])) < 0) return false;
+    }
+    return true;
+}
+bool inconvex(){
+    for(int i=0;i<N;i++){
+        Line l(p[i], p[i+1]);
+        if(cmp((p[i]-Point(X, Y)).cross(p[(i+1)%N]-Point(X, Y))) <= 0) return false;
+    }
+    return true;
+}
+bool cinconvex(){
+    for(int i=0;i<N;i++){
+        Line l(p[i], p[(i+1)%N]);
+        if(cmp(l.dist(Point(X, Y)) - R) < 0) return false;
+    }
+    return true;
+}
 int main(){
-    Point O(0, 0);
-    Point I(1, 1);
-    Line  L1(O, I), L2(Point(0, 3), Point(3, 0));
-    Line L3(Point(-1, 1), Point(0, 1)), L4(Point(1, 1), Point(1, 0));
-//    printf("%f\n", L1.dist(Point(0, 1)));
-//    cout << L1.proj(Point(0, 0)) << endl;
-//    printf("%d\n", L1.online(Point(0.5, 0.5)));
-//    cout << L1 << endl;
-//    cout << nilPoint << " " << nilLine << endl;
-//    cout << L1.intersection(L2) << endl;
-//    cout << L4.intersection(L3) << endl;
-//    cout << L1.move(sqrt(2)) << endl;
-//  cout << L1.isintersect(Line(Point(0, 0), Point(-1, -1)));
-
-    
+    while(~scanf("%d", &N) && N >= 3){
+        scanf("%lf %lf %lf", &R, &X, &Y);
+        for(int i=0;i<N;i++)
+            scanf("%lf %lf", &p[i].x, &p[i].y);
+        int t = 0;
+        for(int i=0;i<N&&t==0;i++){
+            int a = i, b = (i+1) % N, c = (i+2) % N;
+            t = cmp((p[b]-p[a]).cross(p[c]-p[b]));
+        }
+        if(t < 0)
+            reverse(p, p+N);
+        if(!isconvex())
+            puts("HOLE IS ILL-FORMED");
+        else if(!inconvex() || !cinconvex())
+            puts("PEG WILL NOT FIT");
+        else
+            puts("PEG WILL FIT");
+    }
     return 0;
 }
