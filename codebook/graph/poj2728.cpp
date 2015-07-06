@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+#include <math.h>
+#include <stdlib.h>
 using namespace std;
 
 class LCA{
@@ -249,18 +254,18 @@ public:
 };
 /*
  * Minimum Ratio Spanning Tree
- * Solve() returns answer of MRST if there exists an answer else -1
- * notice: if you want make it faster, move G, wG to normal array
  */
 class MRST {
 public:
+#define MAXN 1010
 #define w  first
 #define u  second
     typedef pair<double, double> PD;
     int N;
+    DisjointSet djs;
     vector<vector<PD> > G;
     vector<vector<double> > wG;
-    MRST(int n=0): N(n), G(vector<vector<PD> >(N, vector<PD>(N))), wG(vector<vector<double> >(N, vector<double>(N))) {
+    MRST(int n=0): N(n), djs(DisjointSet(N)), G(vector<vector<PD> >(N, vector<PD>(N))), wG(vector<vector<double> >(N, vector<double>(N))) {
     }
     void add_edge(int a, int b, double _w, double _u){
         G[a][b] = PD(_w, _u);
@@ -306,7 +311,30 @@ public:
 #undef w
 #undef u
 };
+class Point{
+public:
+    int x, y, z;
+    double dis(const Point &rhs){
+        return sqrt((x-rhs.x)*(x-rhs.x) + (y-rhs.y)*(y-rhs.y));
+    }
+    double cost(const Point &rhs){
+        return abs(z-rhs.z);
+    }
+}p[1010];
 
 int main(){
+    int N;
+    while(~scanf("%d", &N) && N){
+        MRST mrst(N);
+        for(int i=0;i<N;i++)
+            scanf("%d %d %d", &p[i].x, &p[i].y, &p[i].z);
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                if(i != j)
+                    mrst.add_edge(i, j, p[i].cost(p[j]), p[i].dis(p[j]));
+            }
+        }
+        printf("%.3f\n", mrst.Solve());
+    }
     return 0;
 }
