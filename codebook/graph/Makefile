@@ -1,6 +1,14 @@
 CC=g++
 FLAGS=-std=c++11 -O2 -g -Wall -Wextra
 
+flow: flow.o
+	$(CC) $(FLAGS) flow.o -o flow.out
+	#valgrind 
+	./flow.out
+
+flow.o: flow.cpp
+	$(CC) $(FLAGS) -c flow.cpp -o flow.o
+
 tree: tree.o
 	$(CC) $(FLAGS) tree.o -o tree.out
 	#valgrind 
