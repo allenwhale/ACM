@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <iostream>
+#include <vector>
 using namespace std;
 const double EPS = 1e-9;
 const double INF = 1e9;
@@ -101,22 +102,27 @@ public:
         return out;
     }
 }nilLine(nilPoint, nilPoint);
-
+Line l[100010];
 int main(){
-    Point O(0, 0);
-    Point I(1, 1);
-    Line  L1(O, I), L2(Point(0, 3), Point(3, 0));
-    Line L3(Point(-1, 1), Point(0, 1)), L4(Point(1, 1), Point(1, 0));
-//    printf("%f\n", L1.dist(Point(0, 1)));
-//    cout << L1.proj(Point(0, 0)) << endl;
-//    printf("%d\n", L1.online(Point(0.5, 0.5)));
-//    cout << L1 << endl;
-//    cout << nilPoint << " " << nilLine << endl;
-//    cout << L1.intersection(L2) << endl;
-//    cout << L4.intersection(L3) << endl;
-//    cout << L1.move(sqrt(2)) << endl;
-    cout << L1.isintersect(Line(Point(0, 0), Point(-1, -1)));
-
-    
+    int N;
+    while(~scanf("%d", &N) && N){
+        vector<Line> vc;
+        vector<int> ans;
+        for(int i=0;i<N;i++){
+            scanf("%lf %lf %lf %lf", &l[i].a.x, &l[i].a.y, &l[i].b.x, &l[i].b.y);
+        }
+        for(int i=0;i<N;i++){
+            bool tf = false;
+            for(int j=i+1;j<N&&!tf;j++){
+                tf = l[j].isintersect(l[i]);
+            }
+            if(tf == false)
+                ans.push_back(i+1);
+        }
+        printf("Top sticks:");
+        for(int i=0;i<(int)ans.size();i++)
+            printf(" %d%c", ans[i], i==((int)ans.size()-1)?'.':',');
+        puts("");
+    }
     return 0;
 }
