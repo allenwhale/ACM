@@ -4,6 +4,10 @@
 #include <map>
 #include <queue>
 using namespace std;
+/*
+ * Maximum Flow Dinic
+ * Solve() returns answer
+ */
 class Dinic{
 public:
     class Edge{
