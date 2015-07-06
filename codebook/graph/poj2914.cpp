@@ -69,8 +69,6 @@ public:
 };
 /*
  * Stoer Wanger
- * Undirected Min Cut
- * Solve() returns answer if graph is connected else 0
  */
 class StoerWanger{
 public:
@@ -134,3 +132,4 @@ int main(){
         printf("%d\n", s.Solve());
     }
 }
+
