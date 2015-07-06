@@ -124,7 +124,6 @@ public:
 };
 /*
  * Mixed Euler
- * Solve() returns if there is a euler circuit or not
  */
 class MEuler{
 public:
