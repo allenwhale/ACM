@@ -33,19 +33,19 @@ public:
     bool operator == (const Point &rhs) const {
         return x == rhs.x && y == rhs.y;
     }
-    double abs(){
+    double Abs(){
         return sqrt(x*x + y*y);
     }
-    double dot(const Point &rhs){
+    double Dot(const Point &rhs){
         return (x*rhs.x + y*rhs.y);
     }
-    double cross(const Point &rhs){
+    double Cross(const Point &rhs){
         return (x*rhs.y - y*rhs.x);
     }
-    double dist(const Point &rhs){
-        return (*this-rhs).abs();
+    double Dist(const Point &rhs){
+        return (*this-rhs).Abs();
     }
-    Point rotate(double d){
+    Point Rotate(double d){
         return Point(x*cos(d)-y*sin(d), x*sin(d)+y*cos(d));
     }
     friend ostream& operator << (ostream &out, const Point &rhs){
@@ -58,42 +58,42 @@ class Line{
 public:
     Point a, b;
     Line(Point _a=Point(), Point _b=Point()): a(_a), b(_b) {}
-    double dist(const Point &rhs){
-        if(cmp((rhs-a).dot(b-a)) < 0) return (rhs-a).abs();
-        if(cmp((rhs-b).dot(a-b)) < 0) return (rhs-b).abs();
-        return fabs((a-rhs).cross(b-rhs) / a.dist(b));
+    double Dist(const Point &rhs){
+        if(cmp((rhs-a).Dot(b-a)) < 0) return (rhs-a).Abs();
+        if(cmp((rhs-b).Dot(a-b)) < 0) return (rhs-b).Abs();
+        return fabs((a-rhs).Cross(b-rhs) / a.Dist(b));
     }
-    Point proj(const Point &rhs){
-        double r = (a-b).dot(rhs-b) / (a-b).dot(a-b);
+    Point Proj(const Point &rhs){
+        double r = (a-b).Dot(rhs-b) / (a-b).Dot(a-b);
         return b+(a-b)*r;
     }
-    bool online(const Point &rhs){
+    bool OnLine(const Point &rhs){
         /* for segment */
-        return cmp((rhs-b).cross(a-b)) == 0 && cmp((rhs-b).dot(rhs-a)) <= 0;
+        return cmp((rhs-b).Cross(a-b)) == 0 && cmp((rhs-b).Dot(rhs-a)) <= 0;
         /* for line */
-        return cmp((rhs-b).cross(a-b)) == 0;
+        return cmp((rhs-b).Cross(a-b)) == 0;
     }
-    bool parallel(const Line &rhs){
-        return !cmp((a-b).cross(rhs.a-rhs.b));
+    bool Parallel(const Line &rhs){
+        return !cmp((a-b).Cross(rhs.a-rhs.b));
     }
-    bool isintersect(const Line &rhs){
-        if(cmp((rhs.a-a).cross(rhs.b-a) * (rhs.a-b).cross(rhs.b-b)) > 0) return false;
-        if(cmp((a-rhs.a).cross(b-rhs.a) * (a-rhs.b).cross(b-rhs.b)) > 0) return false;
+    bool IsIntersect(const Line &rhs){
+        if(cmp((rhs.a-a).Cross(rhs.b-a) * (rhs.a-b).Cross(rhs.b-b)) > 0) return false;
+        if(cmp((a-rhs.a).Cross(b-rhs.a) * (a-rhs.b).Cross(b-rhs.b)) > 0) return false;
         return true;
     }
-    Point intersection(const Line &rhs){
-        if(parallel(rhs)) return nilPoint;
+    Point Intersection(const Line &rhs){
+        if(Parallel(rhs)) return nilPoint;
         /* for segment */
-        if(isintersect(rhs) == false) return nilPoint;
+        if(IsIntersect(rhs) == false) return nilPoint;
         /* end */
-        double s1 = (a-rhs.a).cross(rhs.b-rhs.a);
-        double s2 = (b-rhs.a).cross(rhs.b-rhs.a);
+        double s1 = (a-rhs.a).Cross(rhs.b-rhs.a);
+        double s2 = (b-rhs.a).Cross(rhs.b-rhs.a);
         return (b*s1-a*s2) / (s1-s2);
     }
     Line move(const double &d){
         Point tmp = b - a;
-        tmp = tmp / tmp.abs();
-        tmp = tmp.rotate(PI/2);
+        tmp = tmp / tmp.Abs();
+        tmp = tmp.Rotate(PI/2);
         return Line(a+tmp*d, b+tmp*d);
     }
 
@@ -116,66 +116,66 @@ public:
 	void add(const Point &n){
 		s.push_back(n);
 	}
-    int order(){
+    int Order(){
         int t = 0;
         for(int i=0;i<N&&t==0;i++){
             int a = i, b = (i+1)%N, c = (i+2)%N;
-            t = (s[b]-s[a]).cross(s[c]-s[b]);
+            t = (s[b]-s[a]).Cross(s[c]-s[b]);
         }
         return t;
     }
-	double perimeter(){
+	double Perimeter(){
 		double res = 0;
 		for(int i=0;i<N;i++)
-			res += s[i].dist(s[(i+1)%N]);
+			res += s[i].Dist(s[(i+1)%N]);
 		return res;
 	}
-	double area(){
+	double Area(){
 		double res = 0;
 		for(int i=0;i<N;i++)
-			res += s[i].cross(s[(i+1)%N]);
+			res += s[i].Cross(s[(i+1)%N]);
 		return fabs(res/2.0);
-		return res;
 	}
 #define INSIDE	1
 #define ONEDGE	2
 #define OUTSIDE	0
-	int inpoly(const Point &n){
+	int OnPolygon(const Point &n){
 		Point rfn = Point(-INF, n.y);
 		Line l = Line(n, rfn);
 		int cnt = 0;
 		for(int i=0;i<N;i++){
-			if(Line(s[i], s[(i+1)%N]).online(n))
+			if(Line(s[i], s[(i+1)%N]).OnLine(n))
 				return ONEDGE;
 			if(cmp(s[i].y - s[(i+1)%N].y) == 0)
 				continue;
-			if(l.online(s[i])){
+			if(l.OnLine(s[i])){
 				if(cmp(s[i].y - s[(i+1)%N].y) >= 0)
 					cnt++;
-			}else if(l.online(s[(i+1)%N])){
+			}else if(l.OnLine(s[(i+1)%N])){
 				if(cmp(s[(i+1)%N].y - s[i].y) >= 0)
 					cnt++;
-			}else if(l.isintersect(Line(s[i], s[(i+1)%N])))
+			}else if(l.IsIntersect(Line(s[i], s[(i+1)%N])))
 				cnt++;
 		}
 		return (cnt&1);
 	}
-    Point masscenter(){
-        if(cmp(area()) == 0)return nilPoint;
+    Point MassCenter(){
+        if(cmp(Area()) == 0)return nilPoint;
         Point res;
         for(int i=0;i<N;i++)
-            res = res + (s[i] + s[(i+1)%N]) * s[i].cross(s[(i+1)%N]);
-        return res / area() / 6.0;
+            res = res + (s[i] + s[(i+1)%N]) * s[i].Cross(s[(i+1)%N]);
+        return res / Area() / 6.0;
     }
-    int pointsonedge(){
+    int PointsOnedge(){
         int res = 0;
         for(int i=0;i<N;i++)
             res += __gcd(abs(int(s[(i+1)%N].x-s[i].x)), abs(int(s[(i+1)%N].y-s[i].y)));
         return res;
     }
-    int pointsinside(){
-        return int(area()) + 1 -pointsonedge()/2;
+    int PointsInside(){
+        return int(Area()) + 1 - PointsOnedge()/2;
     }
+
 };
 
 int main(){
