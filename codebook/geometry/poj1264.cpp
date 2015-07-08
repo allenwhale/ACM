@@ -228,11 +228,33 @@ public:
 };
 
 int main(){
-    Polygon poly(4);
-    poly.add(Point(0, 0));
-    poly.add(Point(1, 0));
-    poly.add(Point(1, 1));
-    poly.add(Point(0, 1));
-    printf("%d %d %d %d\n", poly.OnConvex(Point(0.5, 0)), poly.OnConvex(Point(10, 10)), poly.OnConvex(Point(0.5, 0.5)), poly.OnConvex(Point(1, 1)));
+    vector<Polygon> vc;
+    vector<double> A;
+    vector<bool> vis;
+    int N;
+    while(~scanf("%d", &N) && N != -1){
+        vc.push_back(Polygon(N));
+        for(int i=0;i<N;i++){
+            double x, y;
+            scanf("%lf %lf", &x, &y);
+            vc.back().add(Point(x, y));
+        }
+        vc.back() = vc.back().ConvexHull();
+        A.push_back(vc.back().Area());
+        vis.push_back(false);
+    }
+    double x, y;
+    double ans = 0;
+    while(~scanf("%lf %lf", &x, &y)){
+        Point s(x, y);
+        for(int i=0;i<(int)vc.size();i++){
+            if(vis[i] == false && vc[i].OnConvex(s)){
+                ans += A[i];
+                vis[i] = true;
+                break;
+            }
+        }
+    }
+    printf("%.2f\n", ans);
     return 0;
 }
