@@ -201,11 +201,28 @@ public:
             w.push_back(that.s[i]);
         }
         if((int)that.s.size() > 1) w.pop_back();
+        res.N = w.size();
         return res;
     }
 };
 
 int main(){
+    int N, L;
+    scanf("%d %d", &N, &L);
+    Polygon poly(N);
+    for(int i=0;i<N;i++){
+        double x, y;
+        scanf("%lf %lf", &x, &y);
+        poly.add(Point(x, y));
+    }
+    Polygon convex = poly.ConvexHull();
+    double ans = 0;
+    int sz = convex.s.size();
+    for(int i=0;i<sz;i++){
+        ans += convex.s[i].Dist(convex.s[(i+1)%sz]);
+    }
+    ans += PI * 2.0 * L;
+    printf("%d\n", int(ans+0.5));
     
     return 0;
 }
