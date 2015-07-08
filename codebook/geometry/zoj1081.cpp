@@ -141,20 +141,25 @@ public:
 };
 
 int main(){
-    Point O(0, 0);
-    Point I(1, 1);
-    Line  L1(O, I), L2(Point(0, 3), Point(3, 0));
-    Line L3(Point(-1, 1), Point(0, 1)), L4(Point(1, 1), Point(1, 0));
-//    printf("%f\n", L1.dist(Point(0, 1)));
-//    cout << L1.proj(Point(0, 0)) << endl;
-//    printf("%d\n", L1.online(Point(0.5, 0.5)));
-//    cout << L1 << endl;
-//    cout << nilPoint << " " << nilLine << endl;
-//    cout << L1.intersection(L2) << endl;
-//    cout << L4.intersection(L3) << endl;
-//    cout << L1.move(sqrt(2)) << endl;
-//  cout << L1.isintersect(Line(Point(0, 0), Point(-1, -1)));
-
-    
+	int N, M;
+	int t = 0;
+	while(~scanf("%d", &N) && N){
+		scanf("%d", &M);
+		Polygon poly(N);
+		for(int i=0;i<N;i++){
+			double x, y;
+			scanf("%lf %lf", &x, &y);
+			poly.add(Point(x, y));
+		}
+		if(t++)puts("");
+		printf("Problem %d:\n", t);
+		for(int i=0;i<M;i++){
+			double x, y;
+			scanf("%lf %lf", &x, &y);
+			Point test(x, y);
+			if(poly.inpoly(test))puts("Within");
+			else puts("Outside");
+		}
+	}
     return 0;
 }
