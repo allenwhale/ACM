@@ -127,14 +127,22 @@ public:
 #define ONEDGE	2
 #define OUTSIDE	0
 	int inpoly(const Point &n){
-		Point rfn = s[rand()%N];
-		rfn = rfn + Point(rand()%10, rand()%10);
-		Line l(rfn, n);
+		Point rfn = Point(-INF, n.y);
+		Line l = Line(n, rfn);
 		int cnt = 0;
 		for(int i=0;i<N;i++){
 			if(Line(s[i], s[(i+1)%N]).online(n))
 				return ONEDGE;
-			cnt += l.isintersect(Line(s[i], s[(i+1)%N]));
+			if(cmp(s[i].y - s[(i+1)%N].y) == 0)
+				continue;
+			if(l.online(s[i])){
+				if(cmp(s[i].y - s[(i+1)%N].y) >= 0)
+					cnt++;
+			}else if(l.online(s[(i+1)%N])){
+				if(cmp(s[(i+1)%N].y - s[i].y) >= 0)
+					cnt++;
+			}else if(l.isintersect(Line(s[i], s[(i+1)%N])))
+				cnt++;
 		}
 		return (cnt&1);
 	}
