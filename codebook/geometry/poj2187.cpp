@@ -229,18 +229,19 @@ public:
      * farthest node pair
      */
 #define next(x) ((x+1)%N)
-    pair<double, pair<Point, Point>> Diameter(){
+#define dist(a, b) ((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y))
+    pair<int, pair<Point, Point> > Diameter(){
         if(N == 1)
             return make_pair(0, make_pair(s[0], s[0]));
-        double maxd = 0;
+        int maxd = 0;
         Point pa, pb;
         for(int i=0,j=1;i<N;i++){
             while(cmp((s[next(i)]-s[i]).Cross(s[j]-s[i])-(s[next(i)]-s[i]).Cross(s[next(j)]-s[i])) < 0)
                 j = next(j);
-            double d = s[i].Dist(s[j]);
+            int d = dist(s[i], s[j]);
             if(d > maxd)
                 maxd = d, pa = s[i], pb = s[j];
-            d = s[next(i)].Dist(s[next(j)]);
+            d = dist(s[next(i)], s[next(j)]);
             if(d > maxd)
                 maxd = d, pa = s[next(i)], pb = s[next(j)];
         }
@@ -249,12 +250,15 @@ public:
 };
 
 int main(){
-    Polygon poly(4);
-    poly.add(Point(0, 0));
-    poly.add(Point(1, 0));
-    poly.add(Point(2, 2));
-    poly.add(Point(0, 1));
-    auto ans = poly.Diameter();
-    cout << ans.first << " " << ans.second.first << ans.second.second << endl;
+    int N;
+    scanf("%d", &N);
+    Polygon poly(N);
+    for(int i=0;i<N;i++){
+        double x, y;
+        scanf("%lf %lf", &x, &y);
+        poly.add(Point(x, y));
+    }
+    poly = poly.ConvexHull();
+    printf("%d\n", poly.Diameter().first);
     return 0;
 }
