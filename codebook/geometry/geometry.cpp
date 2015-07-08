@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+#define next(x) ((x+1)%N)
+#define prev(x) ((x-1+N)%N)
 const double EPS = 1e-9;
 const double INF = 1e9;
 const double PI = acos(-1);
@@ -36,16 +38,16 @@ public:
     double Abs(){
         return sqrt(x*x + y*y);
     }
-    double Dot(const Point &rhs){
+    double Dot(const Point &rhs) const {
         return (x*rhs.x + y*rhs.y);
     }
-    double Cross(const Point &rhs){
+    double Cross(const Point &rhs) const {
         return (x*rhs.y - y*rhs.x);
     }
-    double Dist(const Point &rhs){
+    double Dist(const Point &rhs) const {
         return (*this-rhs).Abs();
     }
-    Point Rotate(double d){
+    Point Rotate(double d) const {
         return Point(x*cos(d)-y*sin(d), x*sin(d)+y*cos(d));
     }
     bool operator < (const Point &rhs) const {
@@ -89,7 +91,7 @@ public:
     Point Intersection(const Line &rhs){
         if(Parallel(rhs)) return nilPoint;
         /* for segment */
-        if(IsIntersect(rhs) == false) return nilPoint;
+        //if(IsIntersect(rhs) == false) return nilPoint;
         /* end */
         double s1 = (a-rhs.a).Cross(rhs.b-rhs.a);
         double s2 = (b-rhs.a).Cross(rhs.b-rhs.a);
@@ -228,7 +230,6 @@ public:
     /*
      * farthest node pair
      */
-#define next(x) ((x+1)%N)
     pair<double, pair<Point, Point>> Diameter(){
         if(N == 1)
             return make_pair(0, make_pair(s[0], s[0]));
@@ -248,13 +249,51 @@ public:
     }  
 };
 
+class HalfPlane{
+public:
+    /* ax+by+c <= 0*/
+    double a, b, c;
+    /* rhs1 -> rhs2 left side */
+    HalfPlane(const Point &rhs1, const Point &rhs2):
+        a(rhs2.y-rhs1.y), b(rhs1.x-rhs2.x), c(rhs2.Cross(rhs1)){}
+    HalfPlane(double _a=0, double _b=0, double _c=0):
+        a(_a), b(_b), c(_c){}
+    double Value(const Point &rhs){
+        return a*rhs.x + b*rhs.y + c;
+    }
+    Point Intersection(const Point &rhs1, const Point &rhs2){
+        double t1 = Value(rhs1), t2 = Value(rhs2);
+        return (rhs1*t2 - rhs2*t1) / (t2 - t1);
+    }
+    Polygon Cut(const Polygon &rhs){
+        Polygon res;
+        const vector<Point> &w = rhs.s;
+        int N = w.size();
+        for(int i=0;i<(int)w.size();i++){
+            if(cmp(Value(w[i])) <= 0)
+                res.s.push_back(w[i]);
+            else{
+                if(cmp(Value(w[prev(i)])) < 0)
+                    res.s.push_back(Intersection(w[prev(i)], w[i]));
+                if(cmp(Value(w[next(i)])) < 0)
+                    res.s.push_back(Intersection(w[i], w[next(i)]));
+            }
+        }
+        return res;
+    }
+};
+
 int main(){
     Polygon poly(4);
     poly.add(Point(0, 0));
     poly.add(Point(1, 0));
-    poly.add(Point(2, 2));
+    poly.add(Point(1, 1));
     poly.add(Point(0, 1));
-    auto ans = poly.Diameter();
-    cout << ans.first << " " << ans.second.first << ans.second.second << endl;
+    HalfPlane hl(Point(0, 0), Point(1, 1));
+    printf("%f %f %f\n", hl.a, hl.b, hl.c);
+    Polygon p = hl.Cut(poly);
+    for(auto n: p.s){
+        cout << n << endl;
+    }
     return 0;
 }
