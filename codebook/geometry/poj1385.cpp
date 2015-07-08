@@ -48,6 +48,12 @@ public:
     Point rotate(double d){
         return Point(x*cos(d)-y*sin(d), x*sin(d)+y*cos(d));
     }
+    void update(){
+        if(cmp(x) == 0)
+            x = 0;
+        if(cmp(y) == 0)
+            y = 0;
+    }
     friend ostream& operator << (ostream &out, const Point &rhs){
         out << "(" << rhs.x << ", " << rhs.y << ")";
         return out;
@@ -167,18 +173,26 @@ public:
             res = res + (s[i] + s[(i+1)%N]) * s[i].cross(s[(i+1)%N]);
         return res / area() / 6.0;
     }
-    int pointsonedge(){
-        int res = 0;
-        for(int i=0;i<N;i++)
-            res += __gcd(abs(int(s[(i+1)%N].x-s[i].x)), abs(int(s[(i+1)%N].y-s[i].y)));
-        return res;
-    }
-    int pointsinside(){
-        return int(area()) + 1 -pointsonedge()/2;
-    }
 };
 
 int main(){
+    int T;
+    scanf("%d", &T);
+    while(T--){
+        int N;
+        scanf("%d", &N);
+        Polygon poly(N);
+        for(int i=0;i<N;i++){
+            double x, y;
+            scanf("%lf %lf", &x, &y);
+            poly.add(Point(x, y));
+        }
+        if(poly.order() == CLOCKWISE)
+            reverse(poly.s.begin(), poly.s.end());
+        Point ans = poly.masscenter();
+        ans.update();
+        printf("%.2f %.2f\n", ans.x, ans.y);
+    }
     
     return 0;
 }

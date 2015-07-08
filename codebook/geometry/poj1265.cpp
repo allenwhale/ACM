@@ -179,6 +179,22 @@ public:
 };
 
 int main(){
+    int T, t = 1;
+    scanf("%d", &T);
+    while(T--){
+        int N;
+        scanf("%d", &N);
+        Polygon poly(N);
+        poly.add(Point());
+        for(int i=0;i<N-1;i++){
+            double x, y;
+            scanf("%lf %lf", &x, &y);
+            poly.add(poly.s.back() + Point(x, y));
+        }
+        scanf("%*d %*d");
+        printf("Scenario #%d:\n", t++);
+        printf("%d %d %.1f\n\n", poly.pointsinside(), poly.pointsonedge(), poly.area());
+    }
     
     return 0;
 }
