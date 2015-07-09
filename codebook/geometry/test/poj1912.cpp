@@ -267,7 +267,7 @@ public:
     bool IsIntersect(const Line &rhs){
         int i = (upper_bound(A.begin(), A.end(), (rhs.b-rhs.a).Arg()) - A.begin()) % N;
         int j = (upper_bound(A.begin(), A.end(), (rhs.a-rhs.b).Arg()) - A.begin()) % N;
-        if(cmp((rhs.b-rhs.a).Cross(s[i]-rhs.a)*(rhs.b-rhs.a).Cross(s[j]-rhs.a)) <= 0)
+        if(cmp((rhs.b-rhs.a).Cross(s[i]-rhs.a)*(rhs.b-rhs.a).Cross(s[j]-rhs.a)) > 0)
             return true;
         return false;
     }
@@ -365,12 +365,21 @@ Polygon Kernel(const Polygon &rhs){
 }
 
 int main(){
-    Polygon poly(4);
-    poly.add(Point(0, 0));
-    poly.add(Point(1, 0));
-    poly.add(Point(1, 1));
-    poly.add(Point(0, 1));
+    int N;
+    scanf("%d", &N);
+    Polygon poly(N);
+    for(int i=0;i<N;i++){
+        double x, y;
+        scanf("%lf %lf", &x, &y);
+        poly.add(Point(x, y));
+    }
     poly = poly.ConvexHull();
-    printf("%d\n", poly.IsIntersect(Line(Point(0, 0), Point(1, 1))));
+    double x, y;
+    while(~scanf("%lf %lf", &x, &y)){
+        Point p1(x, y);
+        scanf("%lf %lf", &x, &y);
+        Point p2(x, y);
+        puts((N<=1||poly.IsIntersect(Line(p1, p2)))?"GOOD":"BAD");
+    }
     return 0;
 }
