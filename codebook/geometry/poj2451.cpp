@@ -316,14 +316,11 @@ public:
     Polygon Solve(){
         Polygon res;
         sort(s.begin(), s.end());
-        for(auto hlp: s)
-            cout << "hlp: " << hlp << endl;
         deque<HalfPlane> q;
         deque<Point> ans;
         q.push_back(s[0]);
         for(int i=1;i<(int)s.size();i++){
             if(cmp((s[i].b-s[i].a).Arg()-(s[i-1].b-s[i-1].a).Arg()) == 0) continue;
-            cout << "now: " << s[i] << endl;
             while(ans.size() > 0 && cmp(s[i].Value(ans.back())) >= 0){
                 ans.pop_back();
                 q.pop_back();
@@ -352,15 +349,20 @@ public:
 };
 
 int main(){
-    HalfPlaneSet hlps;
-    Point a(0, 0), b(1, 0), c(1, 1), d(0, 1);
-    hlps.add(HalfPlane(a, b));
-    hlps.add(HalfPlane(b, c));
-    hlps.add(HalfPlane(c, d));
-    hlps.add(HalfPlane(d, a));
-    hlps.add(HalfPlane(Point(0.25, 1), Point(1, 0.75)));
-    Polygon ans = hlps.Solve();
-    for(auto p: ans.s)
-        cout << p.update() << endl;
+    int N;
+    while(~scanf("%d", &N)){
+        HalfPlaneSet hlps;
+        hlps.add(HalfPlane(Point(0, 0), Point(1e4, 0)));
+        hlps.add(HalfPlane(Point(1e4, 0), Point(1e4, 1e4)));
+        hlps.add(HalfPlane(Point(1e4, 1e4), Point(0, 1e4)));
+        hlps.add(HalfPlane(Point(0, 1e4), Point(0, 0)));
+        for(int i=0;i<N;i++){
+            double x1, y1, x2, y2;
+            scanf("%lf %lf %lf %lf", &x1, &y1, &x2, &y2);
+            hlps.add(HalfPlane(Point(x1, y1), Point(x2, y2)));
+        }
+        Polygon ans = hlps.Solve();
+        printf("%.1f\n", ans.Area());
+    }
     return 0;
 }
