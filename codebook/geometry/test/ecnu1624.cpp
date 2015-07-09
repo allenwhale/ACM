@@ -344,15 +344,29 @@ public:
 };
 
 int main(){
+    int N, M;
+    scanf("%d", &N);
+    Polygon poly1(N);
+    for(int i=0;i<N;i++){
+        double x, y;
+        scanf("%lf %lf", &x, &y);
+        poly1.add(Point(x, y));
+    }
+    poly1 = poly1.ConvexHull();
+    scanf("%d", &M);
+    Polygon poly2(M);
+    for(int i=0;i<M;i++){
+        double x, y;
+        scanf("%lf %lf", &x, &y);
+        poly2.add(Point(x, y));
+    }
+    poly2 = poly2.ConvexHull();
     HalfPlaneSet hlps;
-    Point a(0, 0), b(1, 0), c(1, 1), d(0, 1);
-    hlps.add(HalfPlane(a, b));
-    hlps.add(HalfPlane(b, c));
-    hlps.add(HalfPlane(c, d));
-    hlps.add(HalfPlane(d, a));
-    hlps.add(HalfPlane(Point(0.25, 1), Point(1, 0.75)));
+    for(int i=0;i<poly1.N;i++)
+        hlps.add(HalfPlane(poly1.s[i], poly1.s[(i+1)%poly1.N]));
+    for(int i=0;i<poly2.N;i++)
+        hlps.add(HalfPlane(poly2.s[i], poly2.s[(i+1)%poly2.N]));
     Polygon ans = hlps.Solve();
-    for(auto p: ans.s)
-        cout << p.update() << endl;
+    printf("%.2f\n", ans.Area());
     return 0;
 }

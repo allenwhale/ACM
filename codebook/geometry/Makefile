@@ -1,4 +1,4 @@
-CC=g++
+CC=clang++
 FLAGS=-std=c++11 -O2 -g -Wall -Wextra
 
 geometry: geometry.o
