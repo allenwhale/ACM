@@ -4,6 +4,7 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
+#include <deque>
 using namespace std;
 #define next(x) ((x+1)%N)
 #define prev(x) ((x-1+N)%N)
@@ -15,6 +16,10 @@ int cmp(double x){
     if(x < 0) return -1;
     return 1;
 }
+class Point;
+class Line;
+class Polygon;
+class HalfPlane;
 
 class Point{
 public:
@@ -35,8 +40,11 @@ public:
     bool operator == (const Point &rhs) const {
         return x == rhs.x && y == rhs.y;
     }
-    double Abs(){
+    double Abs() const {
         return sqrt(x*x + y*y);
+    }
+    double Arg() const {
+        return atan2(y, x);
     }
     double Dot(const Point &rhs) const {
         return (x*rhs.x + y*rhs.y);
@@ -88,10 +96,11 @@ public:
         if(cmp((a-rhs.a).Cross(b-rhs.a) * (a-rhs.b).Cross(b-rhs.b)) > 0) return false;
         return true;
     }
-    Point Intersection(const Line &rhs){
+    /* default is line */
+    Point Intersection(const Line &rhs, bool flag=false){
         if(Parallel(rhs)) return nilPoint;
         /* for segment */
-        //if(IsIntersect(rhs) == false) return nilPoint;
+        if(flag && IsIntersect(rhs) == false) return nilPoint;
         /* end */
         double s1 = (a-rhs.a).Cross(rhs.b-rhs.a);
         double s2 = (b-rhs.a).Cross(rhs.b-rhs.a);
@@ -251,19 +260,20 @@ public:
 
 class HalfPlane{
 public:
-    /* ax+by+c <= 0*/
-    double a, b, c;
+    Point a, b;
     /* rhs1 -> rhs2 left side */
-    HalfPlane(const Point &rhs1, const Point &rhs2):
-        a(rhs2.y-rhs1.y), b(rhs1.x-rhs2.x), c(rhs2.Cross(rhs1)){}
-    HalfPlane(double _a=0, double _b=0, double _c=0):
-        a(_a), b(_b), c(_c){}
-    double Value(const Point &rhs){
-        return a*rhs.x + b*rhs.y + c;
+    HalfPlane(const Point &_a=Point(), const Point &_b=Point()): a(_a), b(_b) {}
+    double Value(const Point &rhs) const {
+        return (rhs-a).Cross(b-a) ;
+    }
+    bool Satisfy(const Point &rhs) const {
+        return cmp(Value(rhs)) <= 0;
     }
     Point Intersection(const Point &rhs1, const Point &rhs2){
-        double t1 = Value(rhs1), t2 = Value(rhs2);
-        return (rhs1*t2 - rhs2*t1) / (t2 - t1);
+        return Line(a, b).Intersection(Line(rhs1, rhs2));
+    }
+    Point Intersection(const HalfPlane &rhs){
+        return Line(a, b).Intersection(Line(rhs.a, rhs.b));
     }
     Polygon Cut(const Polygon &rhs){
         Polygon res;
@@ -281,6 +291,50 @@ public:
         }
         return res;
     }
+    bool operator < (const HalfPlane &rhs) const {
+        int res = cmp((b-a).Arg() - (rhs.b-rhs.a).Arg());
+        return res == 0 ? rhs.Satisfy(a) : (res<0);
+    }
+};
+class HalfPlaneSet{
+public:
+    vector<HalfPlane> s;
+    void add(const HalfPlane &rhs){
+        s.push_back(rhs);
+    }
+    Polygon Solve(){
+        Polygon res;
+        sort(s.begin(), s.end());
+        deque<HalfPlane> q;
+        deque<Point> ans;
+        q.push_back(s[0]);
+        for(int i=1;i<(int)s.size();i++){
+            if(cmp((s[i].b-s[i].a).Arg()-(s[i-1].b-s[i-1].a).Arg()) == 0) continue;
+            while(ans.size() > 0 && !s[i].Satisfy(ans.back())){
+                ans.pop_back();
+                q.pop_back();
+            }
+            while(ans.size() > 0 && !s[i].Satisfy(ans.front())){
+                ans.pop_front();
+                q.pop_front();
+            }
+            ans.push_back(q.back().Intersection(s[i]));
+            q.push_back(s[i]);
+        }
+        while(ans.size() > 0 && !q.front().Satisfy(ans.back())){
+            ans.pop_back();
+            q.pop_back();
+        }
+        while(ans.size() > 0 && !q.back().Satisfy(ans.front())){
+            ans.pop_front();
+            q.pop_front();
+        }
+        ans.push_back(q.back().Intersection(q.front()));
+        for(int i=0;i<(int)ans.size();i++)
+            res.add(ans[i]);
+        res.N = res.s.size();
+        return res;
+    }
 };
 
 int main(){
@@ -289,8 +343,7 @@ int main(){
     poly.add(Point(1, 0));
     poly.add(Point(1, 1));
     poly.add(Point(0, 1));
-    HalfPlane hl(Point(0, 0), Point(1, 1));
-    printf("%f %f %f\n", hl.a, hl.b, hl.c);
+    HalfPlane hl(Point(0.25, 0), Point(1, 0.75));
     Polygon p = hl.Cut(poly);
     for(auto n: p.s){
         cout << n << endl;
