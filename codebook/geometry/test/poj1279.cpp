@@ -346,8 +346,9 @@ public:
 
 Polygon Kernel(const Polygon &rhs){
     HalfPlaneSet hlps;
-    for(int i=0;i<rhs.N;i++)
+    for(int i=0;i<rhs.N;i++){
         hlps.add(HalfPlane(rhs.s[i], rhs.s[(i+1)%rhs.N]));
+    }
     return hlps.Solve();
 }
 
@@ -365,10 +366,6 @@ int main(){
         }
         reverse(poly.s.begin(), poly.s.end());
         Polygon ans = Kernel(poly);
-        printf("ans %d\n", ans.N);
-        for(auto p: ans.s){
-            cout << p << endl;
-        }
         printf("%.2f\n", ans.Area());
     }
     return 0;
