@@ -8,3 +8,6 @@ geometry: geometry.o
 
 geometry.o: geometry.cpp
 	$(CC) $(FLAGS) -c geometry.cpp -o geometry.o
+
+clean:
+	rm *.o *.out
