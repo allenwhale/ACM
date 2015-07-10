@@ -378,7 +378,7 @@ public:
      * default is segment
      * if want to change it to line, remove the if which judge t
      */
-    vector<Point> Intersection(const Line &rhs){
+    vector<Point> Intersection(const Line &rhs) const {
         vector<Point> res;
         Point d1 = rhs.b - rhs.a, d2 = rhs.a - O; 
         double A = d1.x*d1.x + d1.y*d1.y;
@@ -395,7 +395,7 @@ public:
         }
         return res;
     }
-    double SectorArea(const Point &rhs1, const Point &rhs2){
+    double SectorArea(const Point &rhs1, const Point &rhs2) const {
         double theta = rhs1.Arg() - rhs2.Arg();
         while(cmp(theta) <= 0) theta += 2.0 * PI;
         while(cmp(theta - 2.0*PI) >  0) theta -= 2.0 * PI;
@@ -403,7 +403,7 @@ public:
         return R * R * theta / 2.0;
     }
     /* called by Area(const Polygon&) */
-    double calc(const Point &rhs1, const Point &rhs2){
+    double calc(const Point &rhs1, const Point &rhs2) const {
         vector<Point> p;
         bool in1 = (cmp(rhs1.Abs()-R) < 0);
         bool in2 = (cmp(rhs2.Abs()-R) < 0);
@@ -428,7 +428,7 @@ public:
             }
         }
     }
-    double Area(const Polygon &rhs){
+    double Area(const Polygon &rhs) const {
         Polygon that = rhs;
         for(int i=0;i<that.N;i++){
             that.s[i] = that.s[i] - O;
@@ -445,6 +445,19 @@ public:
 };
 
 int main(){
+    double R;
+    while(~scanf("%lf", &R)){
+        Circle c(Point(), R);
+        int N;
+        scanf("%d", &N);
+        Polygon poly(N);
+        for(int i=0;i<N;i++){
+            double x, y;
+            scanf("%lf %lf", &x, &y);
+            poly.add(Point(x, y));
+        }
+        printf("%.2f\n", fabs(c.Area(poly)));
+    }
 
     return 0;
 }
