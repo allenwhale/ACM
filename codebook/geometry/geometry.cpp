@@ -363,14 +363,41 @@ Polygon Kernel(const Polygon &rhs){
         hlps.add(HalfPlane(rhs.s[i], rhs.s[(i+1)%rhs.N]));
     return hlps.Solve();
 }
+class Circle{
+public:
+    Point O;
+    double R;
+    Circle(const Point &o, const double &r): O(o), R(r) {}
+    double Area() const {
+        return PI * R * R;
+    }
+    double Perimeter() const {
+        return 2.0 * PI * R;
+    }
+    vector<Point> Intersection(const Line &rhs){
+        vector<Point> res;
+        Point d1 = rhs.b - rhs.a, d2 = rhs.a - O; 
+        double A = d1.x*d1.x + d1.y*d1.y;
+        double B = 2.0 * d1.Dot(rhs.a-O);
+        double C = d2.x*d2.x + d2.y*d2.y - R*R;
+        double D = B*B -4*A*C;
+        if(cmp(D) >= 0){
+            double t1 = (-B - sqrt(max(0.0, D))) / (2.0*A);
+            double t2 = (-B + sqrt(max(0.0, D))) / (2.0*A);
+            if(cmp(t1-1) <= 0 && cmp(t1) >= 0)
+                res.push_back(rhs.a + d1*t1);
+            if(cmp(t2-1) <= 0 && cmp(t2) >= 0)
+                res.push_back(rhs.a + d1*t2);
+        }
+        return res;
+    }
+};
 
 int main(){
-    Polygon poly(4);
-    poly.add(Point(0, 0));
-    poly.add(Point(1, 0));
-    poly.add(Point(1, 1));
-    poly.add(Point(0, 1));
-    poly = poly.ConvexHull();
-    printf("%d\n", poly.IsIntersect(Line(Point(0, 0), Point(1, 1))));
+    Circle c(Point(0, 0), 4);
+    vector<Point> ans = c.Intersection(Line(Point(4, 1), Point(4, 0)));
+    for(auto p: ans)
+        cout << p << endl;
+
     return 0;
 }
