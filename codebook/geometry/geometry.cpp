@@ -374,6 +374,10 @@ public:
     double Perimeter() const {
         return 2.0 * PI * R;
     }
+    /*
+     * default is segment
+     * if want to change it to line, remove the if which judge t
+     */
     vector<Point> Intersection(const Line &rhs){
         vector<Point> res;
         Point d1 = rhs.b - rhs.a, d2 = rhs.a - O; 
