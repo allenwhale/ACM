@@ -375,6 +375,12 @@ public:
         return 2.0 * PI * R;
     }
     /*
+     * default not includes on the edge
+     */
+    bool InCircle(const Point &rhs) const {
+        return cmp(O.Dist(rhs) - R) < 0;
+    }
+    /*
      * default is segment
      * if want to change it to line, remove the if which judge t
      */
