@@ -494,10 +494,16 @@ public:
 };
 
 int main(){
-    Circle c(Point(), 0);
-    cout << c << endl;
-    vector<Point> p = {Point(0, 0), Point(1, 1), Point(0, 1), Point(10, 20)};
-    cout << Circle::MinCircleCover(p) << endl;
-
+    int N;
+    while(~scanf("%d", &N) && N){
+        vector<Point> vc;
+        for(int i=0;i<N;i++){
+            double x, y;
+            scanf("%lf %lf", &x, &y);
+            vc.push_back(Point(x, y));
+        }
+        Circle ans = Circle::MinCircleCover(vc);
+        printf("%.2f %.2f %.2f\n", ans.O.x, ans.O.y, ans.R);
+    }
     return 0;
 }
