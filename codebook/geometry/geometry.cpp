@@ -52,8 +52,14 @@ public:
     double Dist(const Point &rhs) const {
         return (*this-rhs).Abs();
     }
+    /*
+     * unit of d is radian
+     */
     Point Rotate(double d) const {
-        return Point(x*cos(d)-y*sin(d), x*sin(d)+y*cos(d));
+        return Rotate(cos(d), sin(d));
+    }
+    Point Rotate(double cost, double sint) const {
+        return Point(x*cost-y*sint, x*sint+y*cost);
     }
     bool operator < (const Point &rhs) const {
         if(x == rhs.x)
@@ -487,6 +493,13 @@ public:
         }
         return res;
     }
+    pair<Point, Point> Intersection(const Circle &rhs) const {
+        double d = (O-rhs.O).Abs();
+        double cost = (R*R+d*d-rhs.R*rhs.R) / (2.0*R*d);
+        double sint = sqrt(1.0 - cost*cost);
+        Point rfn = (rhs.O-O) / d * R;
+        return make_pair(O+rfn.Rotate(cost, sint), O+rfn.Rotate(cost, -sint));
+    }
     friend ostream& operator << (ostream& out, const Circle &rhs){
         out << "C{" << rhs.O << ", " << rhs.R << "}";
         return out;
@@ -494,10 +507,10 @@ public:
 };
 
 int main(){
-    Circle c(Point(), 0);
-    cout << c << endl;
-    vector<Point> p = {Point(0, 0), Point(1, 1), Point(0, 1), Point(10, 20)};
-    cout << Circle::MinCircleCover(p) << endl;
+    Circle c1(Point(-2, 0), 1);
+    Circle c2(Point(2, 0), 1);
+    auto ans = c1.Intersection(c2);
+    cout << ans.first << ans.second << endl;
 
     return 0;
 }
