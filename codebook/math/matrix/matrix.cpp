@@ -10,22 +10,22 @@ using namespace std;
 template<class T>
 class Matrix{
 public:
-	vector<vector<T> > D;
-	int R, C;
-	Matrix(): R(0), C(0) {}
+    vector<vector<T> > D;
+    int R, C;
+    Matrix(): R(0), C(0) {}
 
-	Matrix(int r, int c): R(r), C(c) {
-		for(int i=0;i<R;i++)
-			D.push_back(vector<T>(C));
-	}
+    Matrix(int r, int c): R(r), C(c) {
+        for(int i=0;i<R;i++)
+            D.push_back(vector<T>(C));
+    }
 
-	Matrix(const Matrix &rhs): D(rhs.D), R(rhs.R), C(rhs.C) {}
+    Matrix(const Matrix &rhs): D(rhs.D), R(rhs.R), C(rhs.C) {}
 
-	Matrix& operator = (const Matrix &rhs) {
-		R = rhs.R;
-		C = rhs.C;
-		D = rhs.D;
-	}
+    Matrix& operator = (const Matrix &rhs) {
+        R = rhs.R;
+        C = rhs.C;
+        D = rhs.D;
+    }
 
     T& at(const int &rhs1, const int &rhs2) {
         return D[rhs1][rhs2];
@@ -35,23 +35,23 @@ public:
         return D[rhs1][rhs2];
     }
 
-	Matrix operator + (const Matrix &rhs) const {
-		if(R != rhs.R || C != rhs.C) return Matrix();
-		Matrix res(R, C);
-		for(int i=0;i<R;i++)
-			for(int j=0;j<C;j++)
+    Matrix operator + (const Matrix &rhs) const {
+        if(R != rhs.R || C != rhs.C) return Matrix();
+        Matrix res(R, C);
+        for(int i=0;i<R;i++)
+            for(int j=0;j<C;j++)
                 res.at(i, j) = at(i, j) + rhs.at(i, j);
         return res;
-	}
+    }
 
-	Matrix operator - (const Matrix &rhs) const {
-		if(R != rhs.R || C != rhs.C) return Matrix();
-		Matrix res(R, C);
-		for(int i=0;i<R;i++)
-			for(int j=0;j<C;j++)
+    Matrix operator - (const Matrix &rhs) const {
+        if(R != rhs.R || C != rhs.C) return Matrix();
+        Matrix res(R, C);
+        for(int i=0;i<R;i++)
+            for(int j=0;j<C;j++)
                 res.at(i, j) = at(i, j) - rhs.at(i, j);
         return res;
-	}
+    }
 
     Matrix operator * (const Matrix &rhs) const {
         if(C != rhs.R) return Matrix();
@@ -62,14 +62,14 @@ public:
                     res.at(i, j) += at(i, k) * rhs.at(k ,j);
         return res;
     }
-	
-	/* make itself an identity matrix */
+    
+    /* make itself an identity matrix */
     void Identity() {
         for(int i=0;i<R;i++)
             at(i, i) = 1;
     } 
-	
-	// A^rhs
+    
+    // A^rhs
     Matrix pow(int rhs) const {
         if(R != C) return Matrix();
         Matrix res(R, R), p(*this);
@@ -82,12 +82,12 @@ public:
         return res;
     }
 
-	/*
-	 * return guass eliminated matrix 
-	 * r will be chenged to the number of the non-free variables
-	 * l[i] will be set to true if i-th variable is not free
-	 * ignore flag
-	 */
+    /*
+     * return guass eliminated matrix 
+     * r will be chenged to the number of the non-free variables
+     * l[i] will be set to true if i-th variable is not free
+     * ignore flag
+     */
     Matrix GuassElimination(int &r, vector<bool> &l, int flag=0) {
         l = vector<bool>(C);
         r = 0;
@@ -116,11 +116,11 @@ public:
         return res;
     }
 
-	/*
-	 * Ax = b
-	 * it will return the answer(x)
-	 * if row != column or there is any free variable, it will return an empty vector
-	 */
+    /*
+     * Ax = b
+     * it will return the answer(x)
+     * if row != column or there is any free variable, it will return an empty vector
+     */
     vector<double> Solve(vector<double> a) {
         if(R != C) return vector<double>();
         vector<double> res(R);
@@ -143,10 +143,10 @@ public:
         return res;
     }
 
-	/*
-	 * return an inverse matrix
-	 * if row != column or the inverse matrix doesn't exist, it will return an empty matrix
-	 */
+    /*
+     * return an inverse matrix
+     * if row != column or the inverse matrix doesn't exist, it will return an empty matrix
+     */
     Matrix Inverse() {
         if(R != C) return Matrix();
         Matrix t(R, R*2);

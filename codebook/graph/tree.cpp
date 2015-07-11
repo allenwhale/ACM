@@ -48,21 +48,21 @@ public:
 };
 class DisjointSet {
 public:
-	int N;
-	vector<int> p;
-	DisjointSet(int n): N(n), p(vector<int>(N)){
+    int N;
+    vector<int> p;
+    DisjointSet(int n): N(n), p(vector<int>(N)){
         init();
-	}
-    void init(){
-		for(int i=0;i<N;i++)
-			p[i] = i;
     }
-	int find(int x){
-		return p[x] == x ? x : p[x] = find(p[x]);
-	}
-	void U(int a, int b){
-		p[find(b)] = find(a);
-	}
+    void init(){
+        for(int i=0;i<N;i++)
+            p[i] = i;
+    }
+    int find(int x){
+        return p[x] == x ? x : p[x] = find(p[x]);
+    }
+    void U(int a, int b){
+        p[find(b)] = find(a);
+    }
 };
 
 /*

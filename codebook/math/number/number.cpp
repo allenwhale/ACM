@@ -67,12 +67,12 @@ int mod_fact(int n,int &e){
  * return C(n, m) mod P
  */
 int Cmod(int n,int m){
-	/* this section only need to be done once */
+    /* this section only need to be done once */
     fact[0] = 1;
     for(int i=1;i<=P;i++){
         fact[i] = fact[i-1] * i%P;
     }
-	/* end */
+    /* end */
     int a1, a2, a3, e1, e2, e3;
     a1 = mod_fact(n, e1);
     a2 = mod_fact(m, e2);
@@ -124,7 +124,7 @@ bool PrimeTest(ll n, ll a, ll d) {
 }
 /* return true if n is a prime */
 bool MillerRabin(ll n){
-	// test set
+    // test set
     vector<ll> a = {2, 7 ,61};
     for(int i=0;i<(int)a.size();i++)
         if(!PrimeTest(n, a[i], n-1)) return false;
