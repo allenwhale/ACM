@@ -188,20 +188,14 @@ public:
  * the bigger the n is, the more accurate the answer is
  */
 template<class T>
-double simpson(const T &f, double a, double b){
-    double c = (a+b) / 2.0;
-    return (f(a)+4.0*f(c)+f(b)) * (b-a) / 6.0;
-}
-template<class T>
-double simpson(const T &f, double a, double b, double eps, double A){
-    double c = (a+b) / 2.0;    
-    double L = simpson(f, a, c), R = simpson(f, c, b);    
-    if(fabs(A-L-R) <= 15.0*eps) return L + R + (A-L-R) / 15.0;    
-    return simpson(f, a, c, eps/2, L) + simpson(f, c, b, eps/2, R);    
-}
-template<class T>
-double simpson(const T &f, double a, double b, double eps){
-    return simpson(f, a, b, eps, simpson(f, a, b));
+double simpson(const T &f, double a, double b, int n){
+    double h = (b-a) / n;
+    double ans = f(a) + f(b);
+    for(int i=1;i<n;i+=2)
+        ans += 4 * f(a+h*i);
+    for(int i=2;i<n;i+=2)
+        ans += 2 * f(a+h*i);
+    return ans * h / 3;
 }
 
 /* 
@@ -218,7 +212,7 @@ double find(const T &f, double lo, double hi){
     if((sign_lo=sign(f(lo))) == 0) return lo;
     if((sign_hi=sign(f(hi))) == 0) return hi;
     if(sign_hi * sign_lo > 0) return INF;
-    while(hi-lo>EPS){
+    for(int i=0;hi-lo>EPS;i++){
         double m = (hi+lo) / 2;
         int sign_mid = sign(f(m));
         if(sign_mid == 0) return m;
@@ -323,7 +317,17 @@ int permutation2idx(vector<int> a){
     }
     return res;
 }
-
-
 int main(){
+    int N;
+    scanf("%d", &N);
+    vector<double> c(N+1);
+    for(int i=N;i>=0;i--){
+        scanf("%lf", &c[i]);
+    }
+    Function f(c);
+    vector<double> ans = equation(f);
+    sort(ans.begin(), ans.end());
+    for(int i=0;i<(int)ans.size();i++){
+        printf("%.8f\n", ans[i]);
+    }
 }

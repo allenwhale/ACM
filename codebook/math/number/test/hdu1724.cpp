@@ -323,7 +323,17 @@ int permutation2idx(vector<int> a){
     }
     return res;
 }
-
-
+double A, B;
+double foo(double x){
+    return sqrt(B*B*(1-x*x/(A*A)));
+}
 int main(){
+    int T;
+    scanf("%d", &T);
+    while(T--){
+        double l, r;
+        scanf("%lf %lf %lf %lf", &A, &B, &l, &r);
+        double ans = simpson(foo, l, r, 1e-6);
+        printf("%.3f\n", ans*2.0);
+    }
 }
