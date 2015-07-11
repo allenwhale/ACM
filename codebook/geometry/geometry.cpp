@@ -38,6 +38,9 @@ public:
     double Abs() const {
         return sqrt(x*x + y*y);
     }
+    /*
+     * range: 0 ~ 2*PI
+     */
     double Arg() const {
         double res = atan2(y, x);
         if(cmp(res) < 0) res += PI*2.0;
@@ -88,6 +91,9 @@ public:
         if(cmp((rhs-b).Dot(a-b)) < 0) return (rhs-b).Abs();
         return fabs((a-rhs).Cross(b-rhs) / a.Dist(b));
     }
+    /*
+     * the pedal of rhs on line
+     */
     Point Proj(const Point &rhs){
         double r = (a-b).Dot(rhs-b) / (a-b).Dot(a-b);
         return b+(a-b)*r;
@@ -116,6 +122,10 @@ public:
         double s2 = (b-rhs.a).Cross(rhs.b-rhs.a);
         return (b*s1-a*s2) / (s1-s2);
     }
+    /*
+     * move d units along the direction of line
+     * example: {(0, 0) -> (1, 1)} move _/2 becomes {(1, 1) -> (2, 2)}
+     */
     Line move(const double &d){
         Point tmp = b - a;
         tmp = tmp / tmp.Abs();
@@ -140,9 +150,14 @@ public:
 	vector<Point> s;
     vector<double> A;
 	Polygon(int n=0): N(n) {}
-	void add(const Point &n){
+	Polygon& add(const Point &n){
 		s.push_back(n);
+        return *this;
 	}
+    /*
+     * counterclockwise or clockwise
+     * defined as above
+     */
     int Order(){
         int t = 0;
         for(int i=0;i<N&&t==0;i++){
@@ -229,6 +244,9 @@ public:
             res.A[i] = (res.s[(i+1)%res.N]-res.s[i]).Arg();
         return res;
     }
+    /*
+     * O(lg N)
+     */
     int OnConvex(const Point &rhs){
         Point rfn = (s[0]+s[N/3]+s[2*N/3]) / 3.0;
         int l = 0, r = N;
@@ -296,6 +314,9 @@ public:
     Point Intersection(const HalfPlane &rhs){
         return Line(a, b).Intersection(Line(rhs.a, rhs.b));
     }
+    /*
+     * return the polygon cut by halfplane
+     */
     Polygon Cut(const Polygon &rhs){
         Polygon res;
         const vector<Point> &w = rhs.s;
@@ -325,9 +346,13 @@ public:
 class HalfPlaneSet{
 public:
     vector<HalfPlane> s;
-    void add(const HalfPlane &rhs){
+    HalfPlaneSet& add(const HalfPlane &rhs){
         s.push_back(rhs);
+        return *this;
     }
+    /*
+     * return the polygon that satisfies all halfplanes
+     */
     Polygon Solve(){
         Polygon res;
         sort(s.begin(), s.end());
@@ -362,7 +387,9 @@ public:
         return res;
     }
 };
-
+/*
+ * the kernel oh the polygon
+ */
 Polygon Kernel(const Polygon &rhs){
     HalfPlaneSet hlps;
     for(int i=0;i<rhs.N;i++)
@@ -459,6 +486,9 @@ public:
             }
         }
     }
+    /*
+     * the area of overlap between circle and polygon
+     */
     double Area(const Polygon &rhs){
         Polygon that = rhs;
         for(int i=0;i<that.N;i++){
@@ -493,6 +523,9 @@ public:
         }
         return res;
     }
+    /*
+     * the intersections of two circle
+     */
     pair<Point, Point> Intersection(const Circle &rhs) const {
         double d = (O-rhs.O).Abs();
         double cost = (R*R+d*d-rhs.R*rhs.R) / (2.0*R*d);
@@ -512,6 +545,9 @@ public:
         return cmp(R-rhs.R) == 0 && O == rhs.O;
     }
 };
+/*
+ * Area that covered by circles in tc
+ */
 double AreaCombine(vector<Circle> tc){
     vector<Circle> c;
     double res = 0;
