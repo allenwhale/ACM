@@ -126,7 +126,7 @@ public:
      * move d units along the direction of line
      * example: {(0, 0) -> (1, 1)} move _/2 becomes {(1, 1) -> (2, 2)}
      */
-    Line move(const double &d){
+    Line Move(const double &d){
         Point tmp = b - a;
         tmp = tmp / tmp.Abs();
         tmp = tmp.Rotate(PI/2);
