@@ -542,11 +542,14 @@ double AreaCombine(vector<Circle> tc){
                 double x = (crs.first-c[i].O).Arg();
                 double y = (crs.second-c[i].O).Arg();
                 if(cmp(x-y) < 0){
+                    ev.push_back(EV(make_pair((crs.first-c[i].O).Arg(), 1), crs.first));
                     ev.push_back(EV(make_pair(0, -1), boundary));
                     ev.push_back(EV(make_pair(2*PI, 1), boundary));
-                }                
-                ev.push_back(EV(make_pair(x, 1), crs.first));
-                ev.push_back(EV(make_pair(y, -1), crs.second));
+                    ev.push_back(EV(make_pair((crs.second-c[i].O).Arg(), -1), crs.second));
+                }else{
+                    ev.push_back(EV(make_pair((crs.first-c[i].O).Arg(), 1), crs.first));
+                    ev.push_back(EV(make_pair((crs.second-c[i].O).Arg(), -1), crs.second));
+                }
             }
         }
         sort(ev.begin(), ev.end());
@@ -574,7 +577,7 @@ int main(){
     for(int i=0;i<N;i++){
         double x, y, r;
         scanf("%lf %lf %lf", &x, &y, &r);
-        c.push_back({{x, y}, r});
+        c.push_back(Circle(Point(x, y), r));
     }
     printf("%.3f\n", AreaCombine(c));
 
