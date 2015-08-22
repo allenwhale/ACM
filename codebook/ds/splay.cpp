@@ -147,7 +147,7 @@ public:
 };
 int main(){
     const int size = 10;
-    const int time = 5000000;
+    const int time = 100000000;
     SplayTree<int> s[size];
     for(int i=0;i<time;i++){
         s[rand()%size].Insert(rand());
@@ -162,7 +162,7 @@ int main(){
     for(int i=0;i<size;i++){
         printf("%d\n", i);
         //s[i].Print();
-        s[i].Free();
+        //s[i].Free();
     }
     return 0;
 }
