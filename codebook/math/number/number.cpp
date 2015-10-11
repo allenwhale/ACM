@@ -98,13 +98,16 @@ int CRT(vector<int> a, vector<int> m) {
     return (res + M) % M;
 }
 
+ll mul_mod(ll a, ll b, ll m){
+    return b?(mul_mod((a*2)%m,b/2,m)+(b&1?a:0))%m:0;
+}
 /* fast exponential */
 ll pow_mod(ll x, ll N, ll M) {
     ll res = 1;
     x %= M;
     while(N){
-        if(N&1ll) res = (res*x) % M;
-        x *= x; x %= M;
+        if(N&1ll) res = mul_mod(res, x, M);
+        x = mul_mod(x, x, M);
         N >>= 1;
     }
     return res;
@@ -117,7 +120,7 @@ bool PrimeTest(ll n, ll a, ll d) {
     while((d&1) == 0) d >>= 1;
     ll t = pow_mod(a, d, n);
     while((d!=n-1) && (t!=1) && (t!=n-1)){
-        t = (t*t) % n;
+        t = mul_mod(t, t, n);
         d <<= 1;
     }
     return (t==n-1) || ((d&1)==1);
@@ -326,4 +329,5 @@ int permutation2idx(vector<int> a){
 
 
 int main(){
+    printf("%d\n", MillerRabin(1000000000000000009ll));
 }
