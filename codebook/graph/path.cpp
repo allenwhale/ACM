@@ -93,7 +93,7 @@ public:
             }
         RG.AllDijkstra(t);
         dis = RG.dis;
-        priority_queue<PI, vector<PI>, greater<PI>> pq;
+        priority_queue<PI> pq;
         pq.push(PI(-dis[s], s));
         while(!pq.empty()){
             PI v = pq.top();
