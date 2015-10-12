@@ -15,8 +15,7 @@ public:
     Matrix(): R(0), C(0) {}
 
     Matrix(int r, int c): R(r), C(c) {
-        for(int i=0;i<R;i++)
-            D.push_back(vector<T>(C));
+        D = vector<vector<T> >(vector<T>(C), R);
     }
 
     Matrix(const Matrix &rhs): D(rhs.D), R(rhs.R), C(rhs.C) {}

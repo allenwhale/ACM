@@ -128,7 +128,7 @@ bool PrimeTest(ll n, ll a, ll d) {
 /* return true if n is a prime */
 bool MillerRabin(ll n){
     // test set
-    vector<ll> a = {2, 7 ,61};
+    vector<ll> a = {2, 325, 9375, 28178,  450775, 9780504, 1795265022};
     for(int i=0;i<(int)a.size();i++)
         if(!PrimeTest(n, a[i], n-1)) return false;
     return true;
