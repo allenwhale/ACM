@@ -47,7 +47,7 @@ public:
     int Dijkstra(int s, int t){
         const int INF = 0x3f3f3f3f;
         dis = vector<int>(N+1, INF);
-        priority_queue<PI> pq;
+        priority_queue<PI, vector<PI>, greater<PI>> pq;
         dis[s] = 0;
         pq.push(PI(0, s));
         while(!pq.empty()){
@@ -68,7 +68,7 @@ public:
     void AllDijkstra(int s){
         const int INF = 0x3f3f3f3f;
         dis = vector<int>(N+1, INF);
-        priority_queue<PI> pq;
+        priority_queue<PI, vector<PI>, greater<PI>> pq;
         dis[s] = 0;
         pq.push(PI(0, s));
         while(!pq.empty()){
@@ -93,7 +93,7 @@ public:
             }
         RG.AllDijkstra(t);
         dis = RG.dis;
-        priority_queue<PI> pq;
+        priority_queue<PI, vector<PI>, greater<PI>> pq;
         pq.push(PI(-dis[s], s));
         while(!pq.empty()){
             PI v = pq.top();
