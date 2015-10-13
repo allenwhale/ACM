@@ -9,6 +9,7 @@ ll pow_mod(ll x, ll N, ll M) {
     return res;
 }
 bool PrimeTest(ll n, ll a, ll d) {
+    if(n < 2) return false;
     if(n == 2 || n == a) return true;
     if((n&1) == 0) return false;
     while((d&1) == 0) d >>= 1;

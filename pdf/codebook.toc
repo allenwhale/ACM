@@ -8,7 +8,7 @@
 \contentsline {subsection}{\numberline {2.5}C(N,M)}{2}
 \contentsline {subsection}{\numberline {2.6}Phi}{2}
 \contentsline {subsection}{\numberline {2.7}Miller Rabin}{2}
-\contentsline {subsection}{\numberline {2.8}FFT}{2}
+\contentsline {subsection}{\numberline {2.8}FFT}{3}
 \contentsline {subsection}{\numberline {2.9}Function}{3}
 \contentsline {subsection}{\numberline {2.10}Equation}{3}
 \contentsline {subsection}{\numberline {2.11}Permutation}{3}
@@ -32,27 +32,28 @@
 \contentsline {subsection}{\numberline {7.1}BiMatch}{9}
 \contentsline {subsection}{\numberline {7.2}KM}{9}
 \contentsline {subsection}{\numberline {7.3}General Match}{9}
-\contentsline {section}{\numberline {8}MST}{10}
-\contentsline {subsection}{\numberline {8.1}Restricted Minimal Spanning Tree}{10}
+\contentsline {section}{\numberline {8}MST}{11}
+\contentsline {subsection}{\numberline {8.1}Restricted Minimal Spanning Tree}{11}
 \contentsline {subsection}{\numberline {8.2}Minimal Directed Spanning Tree}{11}
-\contentsline {subsection}{\numberline {8.3}Minimal Rational Spanning Tree}{11}
-\contentsline {section}{\numberline {9}Geometry}{12}
-\contentsline {subsection}{\numberline {9.1}Point}{12}
-\contentsline {subsection}{\numberline {9.2}Line}{12}
+\contentsline {subsection}{\numberline {8.3}Minimal Rational Spanning Tree}{12}
+\contentsline {section}{\numberline {9}Geometry}{13}
+\contentsline {subsection}{\numberline {9.1}Point}{13}
+\contentsline {subsection}{\numberline {9.2}Line}{13}
 \contentsline {subsection}{\numberline {9.3}Polygon}{13}
-\contentsline {subsubsection}{\numberline {9.3.1}Pick's Theorem}{13}
-\contentsline {subsubsection}{\numberline {9.3.2}Mass Center}{13}
-\contentsline {subsubsection}{\numberline {9.3.3}Convex}{13}
+\contentsline {subsubsection}{\numberline {9.3.1}Pick's Theorem}{14}
+\contentsline {subsubsection}{\numberline {9.3.2}Mass Center}{14}
+\contentsline {subsubsection}{\numberline {9.3.3}Convex}{14}
 \contentsline {subsubsection}{\numberline {9.3.4}OnConvex}{14}
 \contentsline {subsubsection}{\numberline {9.3.5}Convex Diameter}{14}
-\contentsline {subsubsection}{\numberline {9.3.6}Circle}{14}
-\contentsline {subsubsection}{\numberline {9.3.7}Circle Polygon Cover}{14}
+\contentsline {subsubsection}{\numberline {9.3.6}Circle}{15}
+\contentsline {subsubsection}{\numberline {9.3.7}Circle Polygon Cover}{15}
 \contentsline {subsubsection}{\numberline {9.3.8}Minimal Circle Cover}{15}
-\contentsline {subsubsection}{\numberline {9.3.9}Halfplane}{15}
-\contentsline {subsubsection}{\numberline {9.3.10}Halfplane Set}{15}
+\contentsline {subsubsection}{\numberline {9.3.9}Halfplane}{16}
+\contentsline {subsubsection}{\numberline {9.3.10}Halfplane Set}{16}
 \contentsline {subsubsection}{\numberline {9.3.11}Kernel of Polygon}{16}
-\contentsline {section}{\numberline {10}Data Structure}{16}
-\contentsline {subsection}{\numberline {10.1}Splay Tree}{16}
-\contentsline {section}{\numberline {11}String}{18}
-\contentsline {subsection}{\numberline {11.1}Z Value}{18}
-\contentsline {subsection}{\numberline {11.2}Z Value Longest Palindrome}{18}
+\contentsline {section}{\numberline {10}Data Structure}{17}
+\contentsline {subsection}{\numberline {10.1}Splay Tree}{17}
+\contentsline {section}{\numberline {11}String}{19}
+\contentsline {subsection}{\numberline {11.1}Z Value}{19}
+\contentsline {subsection}{\numberline {11.2}Z Value Longest Palindrome}{19}
+\contentsline {subsection}{\numberline {11.3}Suffix Array}{19}
