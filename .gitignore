@@ -1,7 +1,7 @@
 .*.sw[op]
 *.out
 *.o
-.aux
-.log
-.toc
-.pdf
+*.aux
+*.log
+*.toc
+*.pdf

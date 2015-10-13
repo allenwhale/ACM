@@ -17,8 +17,9 @@ ll pow_mod(ll x, ll N, ll M) {
 bool PrimeTest(ll a, ll n, ll u, int t) {
     ll x = pow_mod(a, u, n);
     for(int i=0;i<t;i++){
-        ll nx = pow_mod(x, x, n);
+        ll nx = pow_mod(x, 2, n);
         if(nx==1&&x!=1&&x!=n-1)return true;
+        x = nx;
     }
     return x != 1;
 }
@@ -27,12 +28,11 @@ bool MillerRabin(ll n){
     if(!(n&1)) return false;
     ll u = n-1, t=0;
     while(!(u&1))u>>=1, t++;
-    // test set
-    vector<ll> a = {2, 325, 9375, 28178,  450775, 9780504, 1795265022};
+    vector<ll> a = {2, 7, 61, 325, 9375, 28178,  450775, 9780504, 1795265022};
     for(int i=0;i<(int)a.size();i++)
-        if(PrimeTest(a[i], n, u, t))return false;
-    for(int i=0;i<1000;i++)
-        if(PrimeTest(rand()%(n-2)+1, n, u, t))return false;
+        if(PrimeTest(a[i]%(n-1)+1, n, u, t))return false;
+    for(int i=0;i<10000;i++)
+        if(PrimeTest(rand()%(n-1)+1, n, u, t))return false;
     return true;
 }
 bool isprime(ll n){
@@ -56,7 +56,8 @@ loop:;
     return true;
 }
 ll factor(ll n){
-    if(isprime(n))return n;
+    //if(isprime(n))return n;
+    if(MillerRabin(n))return n;
     puts("start");
     ll res=1,x=2,x_fixed=x;
     while(res==1||res==n){
