@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.5-0.9999.3 (TeX Live 2013/Debian) (format=xelatex 2015.10.7)  12 OCT 2015 19:33
+This is XeTeX, Version 3.1415926-2.5-0.9999.3 (TeX Live 2013/Debian) (format=xelatex 2015.10.7)  12 OCT 2015 19:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -864,8 +864,7 @@ File: lstlang1.sty 2013/08/26 1.5b listings language file
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2013/08/26 1.5b (Carsten Heinz)
-)
-No file codebook.aux.
+) (./codebook.aux)
 \openout1 = `codebook.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
@@ -1030,11 +1029,11 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 LaTeX Font Warning: Font shape `EU1/Consolas(0)/bx/n' undefined
 (Font)              using `EU1/Consolas(0)/m/n' instead on input line 71.
 
-No file codebook.toc.
+(./codebook.toc)
 \tf@toc=\write3
 \openout3 = `codebook.toc'.
 
-(../../.vimrc
+ (../../.vimrc
 
 LaTeX Font Warning: Font shape `EU1/Consolas(0)/m/it' undefined
 (Font)              using `EU1/Consolas(0)/m/n' instead on input line 1.
@@ -1060,11 +1059,11 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 17537 strings out of 495525
- 325777 string characters out of 6184336
+ 17551 strings out of 495525
+ 325981 string characters out of 6184336
  867222 words of memory out of 5000000
- 20536 multiletter control sequences out of 15000+600000
- 3736 words of font info for 26 fonts, out of 8000000 for 9000
+ 20544 multiletter control sequences out of 15000+600000
+ 4198 words of font info for 29 fonts, out of 8000000 for 9000
  80 hyphenation exceptions out of 8191
  46i,12n,58p,10402b,1794s stack positions out of 5000i,500n,10000p,200000b,80000s
 
