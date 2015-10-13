@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/dev/Debian) (preloaded format=xelatex 2015.10.12)  13 OCT 2015 03:02
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/dev/Debian) (preloaded format=xelatex 2015.10.12)  13 OCT 2015 14:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -732,7 +732,17 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 LaTeX Font Warning: Font shape `EU1/Consolas(0)/bx/n' undefined
 (Font)              using `EU1/Consolas(0)/m/n' instead on input line 70.
 
-(./codebook.toc)
+(./codebook.toc
+Overfull \hbox (0.69182pt too wide) detected at line 52
+\EU1/Consolas(0)/bx/n/7 9.3.10 
+ []
+
+
+Overfull \hbox (0.69182pt too wide) detected at line 53
+\EU1/Consolas(0)/bx/n/7 9.3.11 
+ []
+
+)
 \tf@toc=\write3
 \openout3 = `codebook.toc'.
 
@@ -757,18 +767,40 @@ LaTeX Font Warning: Font shape `EU1/Consolas(0)/m/it' undefined
 (./../codebook/math/matrix/inverse_matrix.cpp [4])
 (./../codebook/graph/cut_bridge.cpp) (./../codebook/graph/bcc.cpp [5])
 (./../codebook/graph/scc.cpp) (./../codebook/graph/twosat.cpp) [6]
-(./codebook.aux)
+(./../codebook/graph/kthshortest.cpp) (./../codebook/graph/euler_circuit.cpp)
+(./../codebook/graph/dinic.cpp) (./../codebook/graph/stoer_wanger.cpp [7])
+(./../codebook/graph/mixed_euler.cpp) [8] (./../codebook/graph/bimatch.cpp)
+(./../codebook/graph/km.cpp) (./../codebook/graph/gmatch.cpp [9])
+(./../codebook/graph/rmst.cpp [10]) (./../codebook/graph/mdst.cpp)
+(./../codebook/graph/mrst.cpp [11]) (./../codebook/geometry/point.cpp)
+(./../codebook/geometry/line.cpp [12]) (./../codebook/geometry/polygon.cpp)
+(./../codebook/geometry/poly_pick.cpp) (./../codebook/geometry/poly_mc.cpp)
+(./../codebook/geometry/poly_convex.cpp [13])
+(./../codebook/geometry/poly_onconvex_lgn.cpp)
+(./../codebook/geometry/convex_diameter.cpp) (./../codebook/geometry/circle.cpp
+) (./../codebook/geometry/circle_poly_cover.cpp [14])
+(./../codebook/geometry/min_circle_cover.cpp)
+(./../codebook/geometry/halfplane.cpp)
+(./../codebook/geometry/halfplane_set.cpp [15])
+(./../codebook/geometry/poly_kernel.cpp) (./../codebook/ds/splay.cpp [16]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+) [17]
+(./../codebook/string/zvalue.cpp) (./../codebook/string/zvalue_palindrome.cpp)
+[18
+
+] (./codebook.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 17307 strings out of 495331
- 329062 string characters out of 6181439
- 856914 words of memory out of 5000000
- 20348 multiletter control sequences out of 15000+600000
+ 17891 strings out of 495331
+ 336211 string characters out of 6181439
+ 898914 words of memory out of 5000000
+ 20847 multiletter control sequences out of 15000+600000
  6479 words of font info for 38 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  46i,12n,59p,10377b,1598s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on codebook.pdf (6 pages).
+Output written on codebook.pdf (18 pages).

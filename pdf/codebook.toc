@@ -21,18 +21,38 @@
 \contentsline {subsection}{\numberline {4.2}BCC}{5}
 \contentsline {subsection}{\numberline {4.3}SCC}{6}
 \contentsline {subsection}{\numberline {4.4}Two Sat}{6}
-\contentsline {section}{\numberline {5}Path}{6}
-\contentsline {subsection}{\numberline {5.1}Kth Shortest}{6}
-\contentsline {subsection}{\numberline {5.2}EulerCircuit}{6}
-\contentsline {section}{\numberline {6}Flow}{6}
-\contentsline {subsection}{\numberline {6.1}Dinic}{6}
-\contentsline {subsection}{\numberline {6.2}StoerWanger}{6}
-\contentsline {subsection}{\numberline {6.3}Mixed Euler}{6}
-\contentsline {section}{\numberline {7}Match}{6}
-\contentsline {subsection}{\numberline {7.1}KM}{6}
-\contentsline {subsection}{\numberline {7.2}BiMatch}{6}
-\contentsline {subsection}{\numberline {7.3}General Match}{6}
-\contentsline {section}{\numberline {8}MST}{6}
-\contentsline {subsection}{\numberline {8.1}Restricted MST}{6}
-\contentsline {subsection}{\numberline {8.2}MDST}{6}
-\contentsline {subsection}{\numberline {8.3}MRST}{6}
+\contentsline {section}{\numberline {5}Path}{7}
+\contentsline {subsection}{\numberline {5.1}Kth Shortest}{7}
+\contentsline {subsection}{\numberline {5.2}EulerCircuit}{7}
+\contentsline {section}{\numberline {6}Flow}{7}
+\contentsline {subsection}{\numberline {6.1}Dinic}{7}
+\contentsline {subsection}{\numberline {6.2}StoerWanger}{7}
+\contentsline {subsection}{\numberline {6.3}Mixed Euler}{8}
+\contentsline {section}{\numberline {7}Match}{9}
+\contentsline {subsection}{\numberline {7.1}BiMatch}{9}
+\contentsline {subsection}{\numberline {7.2}KM}{9}
+\contentsline {subsection}{\numberline {7.3}General Match}{9}
+\contentsline {section}{\numberline {8}MST}{10}
+\contentsline {subsection}{\numberline {8.1}Restricted Minimal Spanning Tree}{10}
+\contentsline {subsection}{\numberline {8.2}Minimal Directed Spanning Tree}{11}
+\contentsline {subsection}{\numberline {8.3}Minimal Rational Spanning Tree}{11}
+\contentsline {section}{\numberline {9}Geometry}{12}
+\contentsline {subsection}{\numberline {9.1}Point}{12}
+\contentsline {subsection}{\numberline {9.2}Line}{12}
+\contentsline {subsection}{\numberline {9.3}Polygon}{13}
+\contentsline {subsubsection}{\numberline {9.3.1}Pick's Theorem}{13}
+\contentsline {subsubsection}{\numberline {9.3.2}Mass Center}{13}
+\contentsline {subsubsection}{\numberline {9.3.3}Convex}{13}
+\contentsline {subsubsection}{\numberline {9.3.4}OnConvex}{14}
+\contentsline {subsubsection}{\numberline {9.3.5}Convex Diameter}{14}
+\contentsline {subsubsection}{\numberline {9.3.6}Circle}{14}
+\contentsline {subsubsection}{\numberline {9.3.7}Circle Polygon Cover}{14}
+\contentsline {subsubsection}{\numberline {9.3.8}Minimal Circle Cover}{15}
+\contentsline {subsubsection}{\numberline {9.3.9}Halfplane}{15}
+\contentsline {subsubsection}{\numberline {9.3.10}Halfplane Set}{15}
+\contentsline {subsubsection}{\numberline {9.3.11}Kernel of Polygon}{16}
+\contentsline {section}{\numberline {10}Data Structure}{16}
+\contentsline {subsection}{\numberline {10.1}Splay Tree}{16}
+\contentsline {section}{\numberline {11}String}{18}
+\contentsline {subsection}{\numberline {11.1}Z Value}{18}
+\contentsline {subsection}{\numberline {11.2}Z Value Longest Palindrome}{18}

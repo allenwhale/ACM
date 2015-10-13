@@ -140,7 +140,6 @@ public:
     void print(Node *rhs, int a=0) const {
         if(rhs == NULL)return;
         print(rhs->L, a+1);
-        //for(int i=0;i<a;i++)cout << ' ';
         cout << rhs->val << " ";
         print(rhs->R, a+1);
     }
@@ -161,8 +160,6 @@ int main(){
     }
     for(int i=0;i<size;i++){
         printf("%d\n", i);
-        //s[i].Print();
-        //s[i].Free();
     }
     return 0;
 }

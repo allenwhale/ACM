@@ -388,7 +388,7 @@ public:
     }
 };
 /*
- * the kernel oh the polygon
+ * the kernel of the polygon
  */
 Polygon Kernel(const Polygon &rhs){
     HalfPlaneSet hlps;
@@ -411,7 +411,7 @@ public:
      * default not includes on the edge
      */
     bool InCircle(const Point &rhs) const {
-        return cmp(O.Dist(rhs) - R) <= 0;
+        return cmp(O.Dist(rhs) - R) < 0;
     }
     /*
      * circumcircle of two points
