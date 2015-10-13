@@ -5,12 +5,12 @@
 \setlength{\columnsep}{16pt}
 \setlength{\columnseprule}{0pt} 
 
-\usepackage{fontspec} %設定字體
+\usepackage{fontspec}
 \usepackage{color}
 \usepackage[x11names]{xcolor}
 \usepackage{CJKutf8} 
 \usepackage{amsmath, courier, listings, fancyhdr, graphicx}
-\topmargin=0pt
+%\topmargin=0pt
 \headsep=5pt
 \textheight=780pt
 \footskip=0pt
@@ -25,7 +25,6 @@
 
 \setmainfont{Consolas}              
 \setmonofont{Consolas}              
-%\setCJKmainfont{Consolas}           
 %\setmainfont{sourcecodepro}
 \XeTeXlinebreaklocale "zh"                      
 \XeTeXlinebreakskip = 0pt plus 1pt              
@@ -50,62 +49,98 @@
     breaklines=true,                                % sets automatic line breaking
     breakatwhitespace=false,                        % sets if automatic breaks should only happen at whitespace
     escapeinside={\%*}{*)},                         % if you want to add a comment within your code
-    morekeywords={*},                               % if you want to add more keywords to the set
-    keywordstyle=\bfseries\color{Blue1},
-    commentstyle=\itshape\color{Red4},
-    stringstyle=\itshape\color{Green4}
-}
+        morekeywords={*},                               % if you want to add more keywords to the set
+        keywordstyle=\bfseries\color{Blue1},
+        commentstyle=\itshape\color{Red4},
+        stringstyle=\itshape\color{Green4}
+    }
 
 
 
-\begin{document}
-\pagestyle{fancy}
-\fancyfoot{}
-%\fancyfoot[R]{\includegraphics[width=20pt]{ironwood.jpg}}
-\fancyhead[L]{National Chiao Tung University Aurora}
-\fancyhead[R]{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\contentsname}{Codebook} 
+    \begin{document}
+    \pagestyle{fancy}
+    \fancyfoot{}
+    %\fancyfoot[R]{\includegraphics[width=20pt]{ironwood.jpg}}
+    \fancyhead[L]{National Chiao Tung University Aurora}
+    \fancyhead[R]{\thepage}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\contentsname}{Codebook} 
 
-\scriptsize
-\tableofcontents
+    \scriptsize
+    \tableofcontents
 
-\newpage
+    \newpage
 
-\section{Basic}
-\subsection{.vimrc}
-\lstinputlisting{../../.vimrc}
-
-
-\section{Number}
-\lstinputlisting{./../codebook/math/number/number.cpp}
-
-\section{Matrix}
-
-\section{Graph}
-\subsection{Bridge And Cut}
-\subsection{BCC}
-\subsection{Two Sat}
-
-\section{Path}
-\subsection{Kth Shortest}
-\subsection{EulerCircuit}
-
-\section{Flow}
-\subsection{Dinic}
-\subsection{StoerWanger}
-\subsection{Mixed Euler}
-
-\section{Match}
-\subsection{KM}
-\subsection{BiMatch}
-\subsection{General Match}
-
-\section{MST}
-\subsection{Restricted MST}
-\subsection{MDST}
-\subsection{MRST}
+    \section{Basic}
+    \subsection{vimrc}
+    \lstinputlisting{../vimrc}
+    \newpage
 
 
+    \section{Number}
+    \subsection{Extended GCD}
+    \lstinputlisting{./../codebook/math/number/ext_gcd.cpp}
+    \subsection{Modular Inverse}
+    \lstinputlisting{./../codebook/math/number/mod_inverse.cpp}
+    \subsection{Line Modular Equation}
+    \lstinputlisting{./../codebook/math/number/line_mod_equation.cpp}
+    \subsection{Chinese Remainder Theorem}
+    \lstinputlisting{./../codebook/math/number/crt.cpp}
+    \subsection{C(N,M)}
+    \lstinputlisting{./../codebook/math/number/C_NM.cpp}
+    \subsection{Phi}
+    \lstinputlisting{./../codebook/math/number/phi.cpp}
+    \subsection{Miller Rabin}
+    \lstinputlisting{./../codebook/math/number/miller_rabin.cpp}
+    \subsection{FFT}
+    \lstinputlisting{./../codebook/math/number/fft.cpp}
+    \subsection{Function}
+    \lstinputlisting{./../codebook/math/number/function.cpp}
+    \subsection{Equation}
+    \lstinputlisting{./../codebook/math/number/equation.cpp}
+    \subsection{Permutation}
+    \lstinputlisting{./../codebook/math/number/permutation.cpp}
+    \newpage
 
-\end{document}
+    \section{Matrix}
+    \subsection{Guass Elimination}
+    \lstinputlisting{./../codebook/math/matrix/guass_elimination.cpp}
+    \subsection{Solve Matrix (Ax=B)}
+    \lstinputlisting{./../codebook/math/matrix/solve_matrix.cpp}
+    \subsection{Inverse Matrix}
+    \lstinputlisting{./../codebook/math/matrix/inverse_matrix.cpp}
+    \newpage
+
+
+    \section{Graph}
+    \subsection{Bridge And Cut}
+    \lstinputlisting{./../codebook/graph/cut_bridge.cpp}
+    \subsection{BCC}
+    \lstinputlisting{./../codebook/graph/bcc.cpp}
+    \subsection{SCC}
+    \lstinputlisting{./../codebook/graph/scc.cpp}
+    \subsection{Two Sat}
+    \lstinputlisting{./../codebook/graph/twosat.cpp}
+
+    \section{Path}
+    \subsection{Kth Shortest}
+    \subsection{EulerCircuit}
+
+    \section{Flow}
+    \subsection{Dinic}
+    \subsection{StoerWanger}
+    \subsection{Mixed Euler}
+
+    \section{Match}
+    \subsection{KM}
+    \subsection{BiMatch}
+    \subsection{General Match}
+
+    \section{MST}
+    \subsection{Restricted MST}
+    \subsection{MDST}
+    \subsection{MRST}
+
+
+
+    \end{document}

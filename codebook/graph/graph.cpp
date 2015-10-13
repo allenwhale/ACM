@@ -65,7 +65,6 @@ public:
                     cut[x] = true;
                 if(low[e.to] > dfn[x])
                     bridge[x][e.to] = bridge[e.to][x] = true;
-
             }
         }
     }
@@ -116,7 +115,6 @@ public:
     void BCC(){
         dfn = low = vector<int>(N+1, -1);
         bcc = vector<vector<int> >();
-        bcc_seq = vector<int>(N+1);
         stk = vector<int>(N+1, -1);
         top = -1;
         for(int i=0;i<N;i++)
