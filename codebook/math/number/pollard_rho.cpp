@@ -1,11 +1,16 @@
+ll f(ll a, ll M){
+	return (mul_mod(a, a, M)+1)%M;
+}
 ll pollard_rho(ll n){
 	if(MillerRabin(n))return n;
-	ll res=1,x=2,x_fixed=x;
+	ll res=n,x,y, c;
+	x=((ll)rand()*rand()+2)%n,y=x;
 	while(res==1||res==n){
-		x = (mul_mod(x, x, n)+rand()%(n-1)+1)%n;
-		x_fixed = (mul_mod(x_fixed, x_fixed, n)+rand()%(n-1)+1)%n;
-		x_fixed = (mul_mod(x_fixed, x_fixed, n)+rand()%(n-1)+1)%n;
-		res = __gcd(abs(x-x_fixed), n);
+		x = f(x, n);
+		y = f(y, n);
+		y = f(y, n);
+		if(x==y)x=((ll)rand()*rand()+2)%n,y=x;
+		res = __gcd(abs(x-y), n);
 	}
 	return res;
 }
@@ -17,15 +22,19 @@ factor Factor(ll n){
 		res[n] = 1;
 		return res;
 	}
-	ll x=pollard_rho(n), y=n/x;
-	int nx=1, ny=1;
-	if(x==y)y=1,nx++;
-	factor fx=Factor(x), fy=Factor(y), res;
-	while(x!=1&&n%x==0)n/=x, nx++;
-	while(y!=1&&n%y==0)n/=y, ny++;
-	for(auto p: fx)
-		res[p.first] += p.second*nx;
-	for(auto p: fy)
-		res[p.first] += p.second*nx;
+	factor res;
+	vector<int> prime={2,3,5,7};
+	for(auto p:prime){
+		int cnt=0;
+		while((n%p)==0)cnt++, n/=p;
+		res[p] = cnt;
+	}
+	if(n==1)return res;
+	ll x=pollard_rho(n), y=n;
+	int nx=0;
+	while(y%x==0)y/=x,nx++;
+	factor fx=Factor(x), fy=Factor(y);
+	for(auto p: fx)res[p.first] += p.second*nx;
+	for(auto p: fy)res[p.first] += p.second;
 	return res;
 }
