@@ -13,7 +13,7 @@ public class test {
         BigInteger ans = new BigInteger("0");
         for(int i = 0 ; i < n ; i++){
             ans = ans.add(b[i]);
-            //add subtract multiply divide mod isProbablePrime
+            //add subtract multiply divide mod isProbablePrime gcd
             System.out.println(b[i]+" "+ans);
         }
     }
