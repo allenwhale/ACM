@@ -15,7 +15,7 @@ public:
 		deque<Point> ans;
 		q.push_back(s[0]);
 		for(int i=1;i<(int)s.size();i++){
-			if(cmp((s[i].b-s[i].a).Arg()-(s[i-1].b-s[i-1].a).Arg()) == 0) continue;
+			if(cmp((s[i].b - s[i].a).Arg() - (s[i - 1].b - s[i - 1].a).Arg()) == 0) continue;
 			while(ans.size() > 0 && cmp(s[i].Value(ans.back())) >= 0){
 				ans.pop_back();
 				q.pop_back();

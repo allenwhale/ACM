@@ -30,7 +30,6 @@ public:
 		if(rhs->L)Free(rhs->L);
 		if(rhs->R)Free(rhs->R);
 		delete rhs;
-		rhs = NULL;
 	}
 	int Size() const {
 		return NodeSize(root);
@@ -147,20 +146,11 @@ public:
 int main(){
 	const int size = 10;
 	const int time = 100000000;
-	SplayTree<int> s[size];
-	for(int i=0;i<time;i++){
-		s[rand()%size].Insert(rand());
-		int a,b;
-		do{
-			a = rand()%size;
-			b = rand()%size;
-		}while(a == b);
-		s[a].Merge(s[b]);
-		s[b].root = NULL;
-	}
-	for(int i=0;i<size;i++){
-		printf("%d\n", i);
-	}
+	SplayTree<int> s;
+    for(int i=0;i<10;i++)
+        s.Merge(SplayTree<int>(i));
+    s.Print();
+    SplayTree<int> a, b;
 	return 0;
 }
 

@@ -187,8 +187,7 @@ public:
 
 /*
  * calculate the integration of f(x) from a to b
- * divided into n piece
- * the bigger the n is, the more accurate the answer is
+ * call simpson(f, a, b, 1e-6)
  */
 template<class T>
 double simpson(const T &f, double a, double b){

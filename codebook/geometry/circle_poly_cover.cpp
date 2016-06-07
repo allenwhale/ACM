@@ -1,8 +1,8 @@
 double SectorArea(const Point &rhs1, const Point &rhs2){
 	double theta = rhs1.Arg() - rhs2.Arg();
 	while(cmp(theta) <= 0) theta += 2.0 * PI;
-	while(cmp(theta - 2.0*PI) >  0) theta -= 2.0 * PI;
-	theta = min(theta, 2.0*PI - theta);
+	while(cmp(theta - 2.0 * PI) >  0) theta -= 2.0 * PI;
+	theta = min(theta, 2.0 * PI - theta);
 	return R * R * theta / 2.0;
 }
 /* called by Area(const Polygon&) */
@@ -41,9 +41,9 @@ double Area(const Polygon &rhs){
 	}
 	double res = 0;
 	for(int i=0;i<that.N;i++){
-		int sng = cmp(that.s[i].Cross(that.s[(i+1)%that.N]));
+		int sng = cmp(that.s[i].Cross(that.s[(i + 1) % that.N]));
 		if(sng){
-			res += sng * calc(that.s[i], that.s[(i+1)%that.N]);
+			res += sng * calc(that.s[i], that.s[(i + 1) % that.N]);
 		}
 	}
 	return res;

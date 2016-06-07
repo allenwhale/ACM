@@ -26,12 +26,12 @@ public:
         D = rhs.D;
     }
 
-    T& at(const int &rhs1, const int &rhs2) {
-        return D[rhs1][rhs2];
+    T& at(const int &x, const int &y) {
+        return D[x][y];
     }
 
-    const T& at(const int &rhs1, const int &rhs2) const {
-        return D[rhs1][rhs2];
+    const T& at(const int &x, const int &y) const {
+        return D[x][y];
     }
 
     Matrix operator + (const Matrix &rhs) const {
@@ -74,7 +74,7 @@ public:
         Matrix res(R, R), p(*this);
         res.Identity();
         while(rhs){
-            if(rhs&1)res = res * p;
+            if(rhs & 1)res = res * p;
             p = p * p;
             rhs >>= 1;
         }
@@ -120,7 +120,7 @@ public:
      * it will return the answer(x)
      * if row != column or there is any free variable, it will return an empty vector
      */
-    vector<double> Solve(vector<double> a) {
+    vector<double> Solve(const vector<double> &a) {
         if(R != C) return vector<double>();
         vector<double> res(R);
         Matrix t(R, C+1);
@@ -148,35 +148,35 @@ public:
      */
     Matrix Inverse() {
         if(R != C) return Matrix();
-        Matrix t(R, R*2);
+        Matrix t(R, R * 2);
         for(int i=0;i<R;i++){
             for(int j=0;j<C;j++)
                 t.at(i, j) = at(i, j);
-            t.at(i, i+R) = 1;
+            t.at(i, i + R) = 1;
         }
         int r = 0;
         vector<bool> l;
         t = t.GuassElimination(r, l, R);
         if(r != R)return Matrix();
         for(int i=0;i<C;i++){
-            if(l[i])for(int j=0;j<R;j++){
+            for(int j=0;j<R;j++){
                 if(fabs(t.at(j, i)) > EPS){
                     for(int k=0;k<C;k++)
-                        t.at(j, C+k) /= t.at(j, i);
+                        t.at(j, C + k) /= t.at(j, i);
                 }
             }
         }
         Matrix res(R, C);
         for(int i=0;i<R;i++)
             for(int j=0;j<C;j++)
-                res.at(i, j) = t.at(i, j+C);
+                res.at(i, j) = t.at(i, j + C);
         return res;
     }
     
     friend ostream& operator << (ostream &out, const Matrix<T> &rhs) {
         for(int i=0;i<rhs.R;i++)
             for(int j=0;j<rhs.C;j++)
-                out << rhs.at(i, j) << (j==rhs.C-1?'\n':' ');
+                out << rhs.at(i, j) << (j == rhs.C - 1 ? '\n' : ' ');
         return out;
     }
 };

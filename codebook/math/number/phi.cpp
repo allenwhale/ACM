@@ -13,9 +13,9 @@ void genphi(){
 				mindiv[j] = i;
 	phi[1] = 1;
 	for(int i=2;i<MAXN;i++){
-		phi[i] = phi[i/mindiv[i]];
-		if((i/mindiv[i])%mindiv[i] == 0)
+		phi[i] = phi[i / mindiv[i]];
+		if((i / mindiv[i]) % mindiv[i] == 0)
 			phi[i] *= mindiv[i];
-		else phi[i] *= (mindiv[i]-1);
+		else phi[i] *= (mindiv[i] - 1);
 	}
 }

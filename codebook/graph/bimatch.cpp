@@ -5,8 +5,7 @@
  * store matching answer in mx, my
  * Solve() returns the number of matching
  */
-class BiMatch{
-public:
+struct BiMatch{
 	int Nx, Ny;
 	vector<vector<int> > vc;
 	vector<int> mx, my;
@@ -36,8 +35,10 @@ public:
 		my = vector<int>(Ny+1, -1);
 		int ans = 0;
 		for(int i=0;i<Nx;i++){
-			visy = vector<int>(Ny+1, 0);
-			ans += Match(i);
+            if(mx[i] == -1){
+                visy = vector<int>(Ny+1, 0);
+                ans += Match(i);
+            }
 		}
 		return ans;
 	}

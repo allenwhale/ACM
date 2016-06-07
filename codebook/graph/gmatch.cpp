@@ -5,15 +5,31 @@
  * important!!!
  * notice the order of disjoint set when unioning
  */
-class GMatch{
-public:
+struct DisjointSet {
+	int N;
+	vector<int> p;
+	DisjointSet(int n): N(n), p(vector<int>(N)){
+        init();
+	}
+    void init(){
+		for(int i=0;i<N;i++)
+			p[i] = i;
+    }
+	int find(int x){
+		return p[x] == x ? x : p[x] = find(p[x]);
+	}
+	void U(int a, int b){
+		p[find(b)] = find(a);
+	}
+};
+struct GMatch{
 	int N;
 	vector<vector<int> > vc;
 	DisjointSet djs;
 	vector<int> m, d, c1, c2, p, vis;
 	queue<int> q;
 	int ts;
-	GMatch(int n): N(n), vc(vector<vector<int> >(N+1)), djs(DisjointSet(N)), ts(0){}
+	GMatch(int n): N(n), vc(vector<vector<int> >(N + 1)), djs(DisjointSet(N)), ts(0){}
 
 	void add(int a, int b){
 		vc[a].push_back(b);
@@ -21,7 +37,7 @@ public:
 	}
 
 	void path(int x, int r){
-		if(x==r)return;
+		if(x == r)return;
 		if(d[x] == 0){
 			int i = p[x], j = p[p[x]];
 			path(j, r);

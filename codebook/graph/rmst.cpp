@@ -5,8 +5,7 @@
  * notice: <=k or ==k
  * Solve() returns value of rmst if there ia an answer else -1
  */
-class RMST{
-public:
+struct RMST{
 #define to  first.first
 #define eid first.second
 #define v1  first.first

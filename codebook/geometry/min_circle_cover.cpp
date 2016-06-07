@@ -10,10 +10,11 @@ Circle Center(const Point &rhs1, const Point &rhs2){
 Circle Center(const Point &rhs1, const Point &rhs2, const Point &rhs3){
 	Circle res(rhs1, 0);
 	Point d1 = rhs2 - rhs1, d2 = rhs3 - rhs1;
-	double c1 = (d1.x*d1.x+d1.y*d1.y) / 2.0, c2 = (d2.x*d2.x+d2.y*d2.y) / 2.0;
+	double c1 = (d1.x * d1.x + d1.y * d1.y) / 2.0, 
+           c2 = (d2.x * d2.x + d2.y * d2.y) / 2.0;
 	double d = d1.Cross(d2);
-	res.O.x += (c1*d2.y-c2*d1.y) / d;
-	res.O.y += (c2*d1.x-c1*d2.x) / d;
+	res.O.x += (c1 * d2.y - c2 * d1.y) / d;
+	res.O.y += (c2 * d1.x - c1 * d2.x) / d;
 	res.R = res.O.Dist(rhs1);
 	return res;
 }

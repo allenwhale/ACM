@@ -20,22 +20,22 @@ public:
     int Order(){
         int t = 0;
         for(int i=0;i<N&&t==0;i++){
-            int a = i, b = (i+1)%N, c = (i+2)%N;
-            t = (s[b]-s[a]).Cross(s[c]-s[b]);
+            int a = i, b = (i + 1) % N, c = (i + 2) % N;
+            t = cmp((s[b] - s[a]).Cross(s[c] - s[b]));
         }
         return t;
     }
     double Perimeter(){
         double res = 0;
         for(int i=0;i<N;i++)
-            res += s[i].Dist(s[(i+1)%N]);
+            res += s[i].Dist(s[(i + 1) % N]);
         return res;
     }
     double Area(){
         double res = 0;
         for(int i=0;i<N;i++)
-            res += s[i].Cross(s[(i+1)%N]);
-        return fabs(res/2.0);
+            res += s[i].Cross(s[(i + 1) % N]);
+        return fabs(res / 2.0);
     }
 #define INSIDE  1
 #define ONEDGE  2
@@ -45,25 +45,25 @@ public:
         Line l = Line(n, rfn);
         int cnt = 0;
         for(int i=0;i<N;i++){
-            if(Line(s[i], s[(i+1)%N]).OnLine(n))
+            if(Line(s[i], s[(i + 1) % N]).OnLine(n))
                 return ONEDGE;
-            if(cmp(s[i].y - s[(i+1)%N].y) == 0)
+            if(cmp(s[i].y - s[(i + 1) % N].y) == 0)
                 continue;
             if(l.OnLine(s[i])){
-                if(cmp(s[i].y - s[(i+1)%N].y) >= 0)
+                if(cmp(s[i].y - s[(i + 1) % N].y) >= 0)
                     cnt++;
-            }else if(l.OnLine(s[(i+1)%N])){
-                if(cmp(s[(i+1)%N].y - s[i].y) >= 0)
+            }else if(l.OnLine(s[(i + 1) % N])){
+                if(cmp(s[(i + 1) % N].y - s[i].y) >= 0)
                     cnt++;
-            }else if(l.IsIntersect(Line(s[i], s[(i+1)%N])))
+            }else if(l.IsIntersect(Line(s[i], s[(i + 1) % N])))
                 cnt++;
         }
-        return (cnt&1);
+        return (cnt & 1);
     }
     bool IsIntersect(const Line &rhs){
         int i = (upper_bound(A.begin(), A.end(), (rhs.b-rhs.a).Arg()) - A.begin()) % N;
         int j = (upper_bound(A.begin(), A.end(), (rhs.a-rhs.b).Arg()) - A.begin()) % N;
-        if(cmp((rhs.b-rhs.a).Cross(s[i]-rhs.a)*(rhs.b-rhs.a).Cross(s[j]-rhs.a)) <= 0)
+        if(cmp((rhs.b - rhs.a).Cross(s[i] - rhs.a) * (rhs.b - rhs.a).Cross(s[j] - rhs.a)) <= 0)
             return true;
         return false;
     }

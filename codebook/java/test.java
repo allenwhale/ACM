@@ -15,7 +15,7 @@ public class test {
         Arrays.sort(b, new comp());
         ans = b[0].add(b[1]);
         //BigInteger: add subtract multiply divide mod isProbablePrime gcd compareTo
-        System.out.println(b[i]+" "+ans);
+        System.out.println(b[i] + " " + ans);
         //Output: print println
     }
     static class comp implements Comparator<Integer> {
