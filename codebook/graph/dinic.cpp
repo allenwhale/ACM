@@ -47,8 +47,10 @@ struct Dinic{
                 E[vc[x][i] ^ 1].f += f;
                 df -= f;
                 res += f;
+                if(df == 0) return res;
             }
         }
+        if(res == 0) dep[x] = -1;
         return res;
     }
     int Solve(int s, int t){
