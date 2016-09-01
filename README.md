@@ -1,3 +1,3 @@
 ACM
 ===
-todo: 卡特蘭數、曼哈頓MST
+todo: 卡特蘭數

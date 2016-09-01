@@ -1,10 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 template <class T>
-class SplayTree{
-public:
-	class Node{
-		public:
+class SplayTree{ public:
+	class Node{ public:
 			Node *L, *R, *P;
 			T val;
 			int sz;

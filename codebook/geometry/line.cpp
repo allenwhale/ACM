@@ -1,5 +1,4 @@
-class Line{
-public:
+struct Line{
 	Point a, b;
 	Line(Point _a=Point(), Point _b=Point()): a(_a), b(_b) {}
 	double Dist(const Point &rhs){
@@ -15,14 +14,15 @@ public:
 		return b + (a - b) * r;
 	}
 	bool OnLine(const Point &rhs){
-		/* for segment */
-		return cmp((rhs - b).Cross(a - b)) == 0 && cmp((rhs - b).Dot(rhs - a)) <= 0;
-		/* for line */
 		return cmp((rhs - b).Cross(a - b)) == 0;
 	}
+    bool OnSegment(const Point &rhs){
+		return cmp((rhs - b).Cross(a - b)) == 0 && cmp((rhs - b).Dot(rhs - a)) <= 0;
+    }
 	bool Parallel(const Line &rhs){
 		return !cmp((a - b).Cross(rhs.a - rhs.b));
 	}
+    //for segment
 	bool IsIntersect(const Line &rhs){
 		if(cmp((rhs.a - a).Cross(rhs.b - a) * (rhs.a - b).Cross(rhs.b - b)) > 0) 
             return false;

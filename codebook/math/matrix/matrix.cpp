@@ -7,14 +7,10 @@
 #include <time.h>
 using namespace std;
 #define EPS 1e-9
-template<class T>
-class Matrix{
-public:
+template<class T> class Matrix{ public:
     vector<vector<T> > D;
     int R, C;
-    Matrix(): R(0), C(0) {}
-
-    Matrix(int r, int c): R(r), C(c) {
+    Matrix(int r=0, int c=0): R(r), C(c) {
         D = vector<vector<T> >(vector<T>(C), R);
     }
 
@@ -61,13 +57,13 @@ public:
                     res.at(i, j) += at(i, k) * rhs.at(k ,j);
         return res;
     }
-    
+
     /* make itself an identity matrix */
     void Identity() {
         for(int i=0;i<R;i++)
             at(i, i) = 1;
     } 
-    
+
     // A^rhs
     Matrix pow(int rhs) const {
         if(R != C) return Matrix();
@@ -83,9 +79,9 @@ public:
 
     /*
      * return guass eliminated matrix 
-     * r will be chenged to the number of the non-free variables
+     * r will be changed to the number of the non-free variables
      * l[i] will be set to true if i-th variable is not free
-     * ignore flag
+     * ignore the last flag columns
      */
     Matrix GuassElimination(int &r, vector<bool> &l, int flag=0) {
         l = vector<bool>(C);
@@ -172,7 +168,7 @@ public:
                 res.at(i, j) = t.at(i, j + C);
         return res;
     }
-    
+
     friend ostream& operator << (ostream &out, const Matrix<T> &rhs) {
         for(int i=0;i<rhs.R;i++)
             for(int j=0;j<rhs.C;j++)

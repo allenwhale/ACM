@@ -1,10 +1,9 @@
 /*
  * default is counterclockwise
  */
-class Polygon{
+struct Polygon{
 #define COUNTERCLOCKWISE 1
 #define CLOCKWISE       -1
-public:
     int N;
     vector<Point> s;
     vector<double> A;
@@ -45,14 +44,14 @@ public:
         Line l = Line(n, rfn);
         int cnt = 0;
         for(int i=0;i<N;i++){
-            if(Line(s[i], s[(i + 1) % N]).OnLine(n))
+            if(Line(s[i], s[(i + 1) % N]).OnSegment(n))
                 return ONEDGE;
             if(cmp(s[i].y - s[(i + 1) % N].y) == 0)
                 continue;
-            if(l.OnLine(s[i])){
+            if(l.OnSegment(s[i])){
                 if(cmp(s[i].y - s[(i + 1) % N].y) >= 0)
                     cnt++;
-            }else if(l.OnLine(s[(i + 1) % N])){
+            }else if(l.OnSegment(s[(i + 1) % N])){
                 if(cmp(s[(i + 1) % N].y - s[i].y) >= 0)
                     cnt++;
             }else if(l.IsIntersect(Line(s[i], s[(i + 1) % N])))

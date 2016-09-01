@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct DisjointSet {
 	int N;
 	vector<int> p;
@@ -32,16 +30,12 @@ struct Bit{
     }
     void update(int x, const T &b){
         for(;x;x-=lb(x))
-            if(bit[x].val > b.val)
-                bit[x] = b;
-            //bit[x] = min(bit[x], b);
+            bit[x] = min(bit[x], b);
     }
     int query(int x){
         T res = {INT_MAX, -1};
         for(;x<=N;x+=lb(x))
-            if(res.val > bit[x].val)
-                res = bit[x];
-            //res = min(res, bit[x]);
+            res = min(res, bit[x]);
         return res.pos;
     }
 };
@@ -70,11 +64,11 @@ struct Manhattan_MST{
         Bit bit(points.size());
         for(int dir=0;dir<4;dir++){
             if(dir == 1 || dir == 3){
-                for(int i=0;i<(int)points.size();i++)
-                    swap(points[i].x, points[i].y);
+                for(auto &point: points)
+                    swap(point.x, point.y);
             } else if(dir == 2){
-                for(int i=0;i<(int)points.size();i++)
-                    points[i].x = -points[i].x;
+                for(auto &point: points)
+                    point.x = -point.x;
             }
             sort(points.begin(), points.end());
             vector<int> hs(points.size()), T(points.size());
@@ -114,17 +108,3 @@ struct Manhattan_MST{
     }
 
 };
-int main(){
-    int t = 1;
-    int N;
-    while(~scanf("%d", &N) && N){
-        Manhattan_MST mst;
-        while(N--){
-            int a, b;
-            scanf("%d%d", &a, &b);
-            mst.add_point({N, {a, b}});
-        }
-        printf("Case %d: Total Weight = %d\n", t++, mst.Solve());
-    }
-    return 0;
-}

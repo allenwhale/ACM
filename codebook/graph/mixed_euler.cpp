@@ -3,14 +3,11 @@
  * a graph contains directed & undirected edges
  * Solve() returns if there is a euler circuit or not
  */
-class MEuler{
-public:
-	class Edge{
+struct MEuler{
+	struct Edge{
 #define DIRECTED    1
 #define UNDIRECTED  0
-		public:
 			int to, dir;
-			Edge(int t=0, int d=0): to(t), dir(d){}
 	};
 	int N;
 	Dinic dinic;
@@ -19,15 +16,14 @@ public:
 
 	MEuler(int n=0): N(n), dinic(Dinic(N + 2)), deg(vector<int>(N, 0)), vc(vector<vector<Edge> >(N)) {}
 	void add_edge(int a, int b, int d){
-		vc[a].push_back(Edge(b, d));
+		vc[a].push_back({b, d});
 		deg[a]++, deg[b]--;
 	}
 	bool Solve(){
 		for(int i=0;i<N;i++)
 			if(abs(deg[i]) & 1) return false;
 		for(int i=0;i<N;i++)
-			for(int j=0;j<(int)vc[i].size();j++){
-				Edge e = vc[i][j];
+            for(Edge e:vc[i]){
 				if(e.dir == UNDIRECTED)
 					dinic.add_edge(i, e.to, 1);
 			}

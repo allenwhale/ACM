@@ -3,10 +3,9 @@
  * coef is the coefficient
  * f(x) = sigma(c[i]*x^i)
  */
-class Function {
-public:
+struct Function {
 	vector<double> coef;
-	Function(const vector<double> c=vector<double>()): coef(c){}
+	Function(const vector<double> &c=vector<double>()): coef(c){}
 	double operator () (const double &rhs) const {
 		double res = 0.0;
 		double e = 1.0;
@@ -15,13 +14,13 @@ public:
 		return res;
 	}
 	Function derivative() const {
-		vector<double> dc((int)this->coef.size()-1);
+		vector<double> dc(coef.size()-1);
 		for(int i=0;i<(int)dc.size();i++)
 			dc[i] = coef[i + 1] * (i + 1);
 		return Function(dc);
 	}
 	int degree() const {
-		return (int)coef.size() - 1;
+		return coef.size() - 1;
 	}
 };
 /*

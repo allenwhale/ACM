@@ -1,4 +1,4 @@
-vector<int> z_value(string s){
+vector<int> z_value(const string& s){
 	int len = s.size();
 	vector<int> z(0, len);
 	int l = 0, r = 0;

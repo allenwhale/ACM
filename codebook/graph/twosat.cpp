@@ -21,21 +21,15 @@ bool TwoSat(){
 		c[scc[i]].push_back(i);
 	for(int i=0;i<scc_cnt;i++){
 		int val = 1;    
-		for(int j=0;j<(int)c[i].size();j++){
-			int x = c[i][j];
-			if(TwoSatGet(x) == 0)
-				val = 0;
-			for(int k=0;k<(int)ed[x].size();k++)
-				if(TwoSatGet(ed[x][k]) == 0)
-					val = 0;
-			if(!val)
-				break;
+        for(int x:c[i]){
+			if(TwoSatGet(x) == 0) val = 0;
+            for(int y:ed[x])
+				if(TwoSatGet(y) == 0) val = 0;
+			if(!val) break;
 		}
-		for(int j=0;j<(int)c[i].size();j++){
-			if(c[i][j] > N/2)
-				twosatans[c[i][j]-N/2] = !val;
-			else
-				twosatans[c[i][j]] = val;
+        for(int x:c[i]){
+			if(x > N/2) twosatans[x-N/2] = !val;
+			else twosatans[x] = val;
 		}
 	}
 	return true;

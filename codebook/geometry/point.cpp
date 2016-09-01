@@ -6,8 +6,7 @@ int cmp(double x){
     if(x > 0) return 1;
     else return -1;
 }
-class Point{
-public:
+struct Point{
 	double x ,y;
 	Point(double _x=0, double _y=0): x(_x), y(_y) {}
 	Point operator + (const Point &rhs) const {
@@ -46,7 +45,7 @@ public:
 		return (*this - rhs).Abs();
 	}
 	/*
-	 * unit of d is radian(countercloskwise)
+	 * unit of d is radian(counterclockwise)
 	 */
 	Point Rotate(double d) const {
 		return Rotate(cos(d), sin(d));

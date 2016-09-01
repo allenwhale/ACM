@@ -33,16 +33,12 @@ struct Bit{
     }
     void update(int x, const T &b){
         for(;x;x-=lb(x))
-            if(bit[x].val > b.val)
-                bit[x] = b;
-            //bit[x] = min(bit[x], b);
+            bit[x] = min(bit[x], b);
     }
     int query(int x){
         T res = {INT_MAX, -1};
         for(;x<=N;x+=lb(x))
-            if(res.val > bit[x].val)
-                res = bit[x];
-            //res = min(res, bit[x]);
+            res = min(res, bit[x]);
         return res.pos;
     }
 };
@@ -71,11 +67,11 @@ struct Manhattan_MST{
         Bit bit(points.size());
         for(int dir=0;dir<4;dir++){
             if(dir == 1 || dir == 3){
-                for(int i=0;i<(int)points.size();i++)
-                    swap(points[i].x, points[i].y);
+                for(auto &point: points)
+                    swap(point.x, point.y);
             } else if(dir == 2){
-                for(int i=0;i<(int)points.size();i++)
-                    points[i].x = -points[i].x;
+                for(auto &point: points)
+                    point.x = -point.x;
             }
             sort(points.begin(), points.end());
             vector<int> hs(points.size()), T(points.size());
@@ -102,7 +98,7 @@ struct Manhattan_MST{
         int cnt = points.size() - 1;
         for(auto &edge: edges){
             if(d.find(edge.v1) != d.find(edge.v2)){
-                ans += (ll)edge.w;
+                ans += edge.w;
                 d.merge(edge.v1, edge.v2);
                 if(!--cnt)break;
             }

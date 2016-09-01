@@ -103,20 +103,20 @@ namespace KD {
         GetTree(tr, v);
         return Build(v.begin(), 0, v.size(), 0);
     }
-    Node **Insert(Node *&tr, const Point &p, int d, Node **&bad) {
+    Node **Insert(Node *&tr, const Point &p, int d) {
         if(tr == nil) {
             tr = New(p, d);
             return &nil;
         }
         Node **res;
-        if(cmp(d)(p, tr->p)) res = Insert(tr->L, p, (d + 1) % DEGREE, bad);
-        else res = Insert(tr->R, p, (d + 1) % DEGREE, bad);
+        if(cmp(d)(p, tr->p)) res = Insert(tr->L, p, (d + 1) % DEGREE);
+        else res = Insert(tr->R, p, (d + 1) % DEGREE);
         tr->pull();
         if(tr->isbad())res = &tr;
         return res;
     }
     void Insert(Node *&tr, const Point &p) {
-        Node **bad = Insert(tr, p, 0, bad);
+        Node **bad = Insert(tr, p, 0);
         if(bad != &nil) *bad = Rebuild(*bad);
     }
     Node **GetMin(Node *&tr, int d) {

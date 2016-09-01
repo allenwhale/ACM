@@ -3,7 +3,7 @@
  * build the sequence of a that used to calculate FFT
  * return a reversed sequence
  */
-vector<Complex> reverse(vector<Complex> a){
+vector<Complex> reverse(const vector<Complex>& a){
 	vector<Complex> res(a);
 	for (int i=1,j=0;i<(int)res.size();i++){
 		for(int k=((int)res.size())>>1;!((j^=k)&k);k>>=1);
@@ -15,10 +15,10 @@ vector<Complex> reverse(vector<Complex> a){
  * calculate the FFT of sequence
  * a.size() must be 2^k
  * flag = 1  -> FFT(a)
- * falg = -1 -> FFT-1(a)
+ * flag = -1 -> FFT-1(a)
  * return FFT(a) or FFT-1(a)
  */
-vector<Complex> FFT(vector<Complex> a, int flag=1){
+vector<Complex> FFT(const vector<Complex>& a, int flag=1){
 	vector<Complex> res = reverse(a);
 	for(int k=2;k<=(int)res.size();k<<=1){
 		double p0 = -pi / (k>>1) * flag;
@@ -32,5 +32,6 @@ vector<Complex> FFT(vector<Complex> a, int flag=1){
 			}
 		}
 	}
+    if(flag == -1) for(auto &x:res) x /= (double)res.size();
 	return res;
 }

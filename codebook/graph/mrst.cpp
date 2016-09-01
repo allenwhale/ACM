@@ -1,7 +1,6 @@
 /*
  * Minimum Ratio Spanning Tree
  * Solve() returns answer of MRST if there exists an answer else -1
- * notice: if you want make it faster, move G, wG to normal array
  */
 struct MRST {
 #define w  first

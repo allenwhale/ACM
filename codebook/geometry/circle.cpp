@@ -1,5 +1,4 @@
-class Circle{
-public:
+struct Circle{
 	Point O;
 	double R;
 	Circle(const Point &o, const double &r): O(o), R(r) {}
@@ -44,7 +43,7 @@ public:
 		double cost = (R * R + d * d - rhs.R * rhs.R) / (2.0 * R * d);
 		double sint = sqrt(1.0 - cost * cost);
 		Point rfn = (rhs.O - O) / d * R;
-		return make_pair(O + rfn.Rotate(cost, sint), O + rfn.Rotate(cost, -sint));
+		return {O + rfn.Rotate(cost, sint), O + rfn.Rotate(cost, -sint)};
 	}
 	friend ostream& operator << (ostream& out, const Circle &rhs){
 		out << "C{" << rhs.O << ", " << rhs.R << "}";

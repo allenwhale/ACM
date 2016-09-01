@@ -14,8 +14,7 @@ void AllDijkstra(int s, int g){
     while(!pq.empty()){
         PI now = pq.top(); pq.pop();
         if(now.w > dis[now.to]) continue;
-        for(int i=0;i<(int)ed[g][now.to].size();i++){
-            PI e = ed[g][now.to][i];
+        for(PI e:ed[g][now.to]){
             if(dis[e.to] > dis[now.to] + e.w){
                 dis[e.to] = dis[now.to] + e.w;
                 pq.push({dis[e.to], e.to});
@@ -25,8 +24,7 @@ void AllDijkstra(int s, int g){
 }
 int KthShortestPath(int s, int t, int k){
     for(int i=0;i<N;i++){
-        for(int j=0;j<(int)ed[0][i].size();j++){
-            PI e = ed[0][i][j];
+        for(PI e:ed[0][i]){
             ed[1][e.to].push_back({e.w, i});
         }
     }
@@ -38,9 +36,7 @@ int KthShortestPath(int s, int t, int k){
         int real = -now.w - dis[now.to];
         if(now.to == t && (!(--k)))
             return real;
-        
-		for(int i=0;i<(int)ed[0][now.to].size();i++){
-			PI e = ed[0][now.to][i];
+        for(PI e:ed[0][now.to]){
 			pq.push({-(real+e.w+dis[e.to]), e.to});
 		}
     }

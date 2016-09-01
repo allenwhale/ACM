@@ -21,12 +21,12 @@ vector<int> idx2permutation(int x, int n){
 	return res;
 }
 /*
- * a is x-th og n!
+ * a is x-th of n!
  * return x(0~n!)
  * 123 of 3! -> 0
  * 321 of 3! -> 5
  */
-int permutation2idx(vector<int> a){
+int permutation2idx(const vector<int>& a){
 	int res = 0;
 	for(int i=0;i<(int)a.size();i++){
 		int tmp = a[i] - 1;

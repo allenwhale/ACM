@@ -4,7 +4,7 @@
 #define next(i) (((i)+1)%N)
 pair<double, pair<Point, Point> > Diameter(){
 	if(N == 1)
-		return make_pair(0, make_pair(s[0], s[0]));
+		return {0, {s[0], s[0]}};
 	double maxd = 0;
 	Point pa, pb;
 	for(int i=0,j=1;i<N;i++){
@@ -17,5 +17,5 @@ pair<double, pair<Point, Point> > Diameter(){
 		if(d > maxd)
 			maxd = d, pa = s[next(i)], pb = s[next(j)];
 	}
-	return make_pair(maxd, make_pair(pa, pb));
+	return {maxd, {pa, pb}};
 }  

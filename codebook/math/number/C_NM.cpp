@@ -7,7 +7,7 @@ int mod_fact(int n, int &e){
 	if(n == 0) return 1;
 	int res = mod_fact(n / P, e);
 	e += n / P;
-	if((n/P) % 2 == 0)
+	if(((n/P) & 1) == 0)
 		return res * (fact[n % P] % P);
 	return res * ((P - fact[n % P]) % P);
 }

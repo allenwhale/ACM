@@ -4,8 +4,7 @@
  * Solve() returns answer if graph is connected else 0
  * restriction: no neg edge
  */
-class StoerWanger{
-public:
+struct StoerWanger{
 	int N, wN;
 	vector<vector<int> >G;
 	vector<int> bln, dis;

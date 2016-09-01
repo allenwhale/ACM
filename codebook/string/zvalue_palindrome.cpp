@@ -1,4 +1,4 @@
-vector<int> zvaule_pali(string s1){
+vector<int> zvaule_pali(const string& s1){
 	int len1 = s1.size(), len2 = len1 * 2 - 1;
 	vector<int> z(len2, 0);
 	string s2(len2, '@');

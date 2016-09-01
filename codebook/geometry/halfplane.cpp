@@ -1,5 +1,4 @@
-class HalfPlane{
-public:
+struct HalfPlane{
 	Point a, b;
 	/* a -> b left side */
 	HalfPlane(const Point &_a=Point(), const Point &_b=Point()): a(_a), b(_b) {}

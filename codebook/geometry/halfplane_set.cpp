@@ -1,5 +1,4 @@
-class HalfPlaneSet{
-public:
+struct HalfPlaneSet{
 	vector<HalfPlane> s;
 	HalfPlaneSet& add(const HalfPlane &rhs){
 		s.push_back(rhs);

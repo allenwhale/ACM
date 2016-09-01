@@ -24,8 +24,7 @@ struct MDST{
             fill(dis.begin(), dis.end(), INF);
             fill(vis.begin(), vis.end(), -1);
             fill(bln.begin(), bln.end(), -1);
-            for(int i=0;i<(int)E.size();i++){
-                PII e = E[i];
+            for(PII e:E[i]){
                 if(e.v1 != e.v2 && e.v2 != r && e.w < dis[e.v2])
                     dis[e.v2] = e.w, pre[e.v2] = e.v1;
             }
@@ -50,8 +49,7 @@ struct MDST{
                 }
             }
             if(tf == false) break;
-            for(int i=0;i<(int)E.size();i++){
-                PII &e = E[i];
+            for(PII &e:E[i]){
                 if(bln[e.v2] != -1) e.w -= dis[e.v2];
                 if(bln[e.v1] != -1) e.v1 = bln[e.v1];
                 if(bln[e.v2] != -1) e.v2 = bln[e.v2];

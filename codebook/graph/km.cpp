@@ -1,7 +1,7 @@
 /*
  * solve Maximun Bipartite Matching
  * store matching answer in mx ,my
- * Solve() returns themaximun weight of perfect matching
+ * Solve() returns the maximun weight of perfect matching
  */
 struct KM{
 #define FF first
@@ -42,14 +42,17 @@ struct KM{
         my = vector<int>(Ny+1, -1);
         lx = vector<int>(Nx+1, -INF);
         ly = vector<int>(Ny+1, 0);
+        slack = vector<int>(Ny+1, INF);
+        visx = vector<int>(Nx+1, 0);
+        visy = vector<int>(Ny+1, 0);
         for(int i=0;i<Nx;i++)
             for(int j=0;j<Ny;j++)
                 lx[i] = max(lx[i], mp[i][j]);
         for(int i=0;i<Nx;i++){
-            slack = vector<int>(Ny+1, INF);
+            fill(slack.begin(), slack.end(), INF);
             while(true){
-                visx = vector<int>(Nx+1, 0);
-                visy = vector<int>(Ny+1, 0);
+                fill(visx.begin(), visx.end(), 0);
+                fill(visy.begin(), visy.end(), 0);
                 if(Match(i)) break;
                 int d = INF;
                 for(int j=0;j<Ny;j++)

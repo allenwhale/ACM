@@ -1,4 +1,4 @@
-vector<int> SuffixArray(string s){
+vector<int> SuffixArray(const string& s){
 	int len = s.size();
 	int alpha = 256;
 	vector<int> cnt(0, alpha), rank(0, len), sa(0, len), tsa(0, len), tp[2];
@@ -19,7 +19,7 @@ vector<int> SuffixArray(string s){
 		fill(cnt.begin(), cnt.end(), 0);
 		for(int j=0;j<len;j++)cnt[tp[0][j] + 1]++;
 		for(int j=1;j<alpha;j++)cnt[j] += cnt[j - 1];
-		for(int j=0;j<len;j++)tsa[cnt[tp[0][j]]++] = j;
+		for(int j=0;j<len;j++)sa[cnt[tp[0][tsa[j]]]++] = tsa[j];
 		rank[sa[0]] = 0;
 		for(int j=1;j<len;j++){
 			if(tp[0][sa[j]] == tp[0][sa[j - 1]] && tp[1][sa[j]] == tp[1][sa[j - 1]]){
