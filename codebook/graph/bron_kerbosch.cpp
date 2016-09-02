@@ -1,6 +1,7 @@
 /*
  * Maximal Clique
  * store maximal cliques in ans
+ * __builtin_ctz: returns the number of trailing 0-bits
  */
 typedef unsigned long long ull;
 ull ed[64];
