@@ -19,7 +19,10 @@ bool find() {
         while(j >= 0 && T[j + 1] != P[i])
             j = fail[j];
         if(T[j + 1] == P[i]) j++;
-        if(j == lenT - 1) return true;
+        if(j == lenT - 1) {
+            j = fail[j];
+            return true;
+        }
     }
     return false;
 }

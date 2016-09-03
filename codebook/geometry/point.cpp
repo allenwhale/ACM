@@ -25,7 +25,7 @@ struct Point{
 		return x == rhs.x && y == rhs.y;
 	}
 	double Abs() const {
-		return sqrt(x * x + y * y);
+		return sqrt(Dot(*this));
 	}
 	/*
 	 * range: 0 ~ 2*PI
