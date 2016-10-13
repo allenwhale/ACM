@@ -18,7 +18,7 @@ struct BiMatch{
 	}
 
 	bool Match(int x){
-        for(int y:vc[x]){
+		for(int y:vc[x]){
 			if(!visy[y]){
 				visy[y] = 1;
 				if(my[y] == -1 || Match(my[y])){
@@ -32,13 +32,13 @@ struct BiMatch{
 	int Solve(){
 		mx = vector<int>(Nx+1, -1);
 		my = vector<int>(Ny+1, -1);
-        visy = vector<int>(Ny+1, 0);
+		visy = vector<int>(Ny+1, 0);
 		int ans = 0;
 		for(int i=0;i<Nx;i++){
-            if(mx[i] == -1){
-                fill(visy.begin(), visy.end(), 0);
-                ans += Match(i);
-            }
+			if(mx[i] == -1){
+				fill(visy.begin(), visy.end(), 0);
+				ans += Match(i);
+			}
 		}
 		return ans;
 	}

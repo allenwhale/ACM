@@ -26,10 +26,10 @@ void _cut_bridge(int x, int f, int d){
 	}
 }
 void cut_bridge(){
-    memset(dfn, -1, sizeof(dfn));
-    memset(low, 1, sizeof(low));
-    memset(cut, false, sizeof(cut));
-    memset(bridge, false, sizeof(bridge));
+	memset(dfn, -1, sizeof(dfn));
+	memset(low, 1, sizeof(low));
+	memset(cut, false, sizeof(cut));
+	memset(bridge, false, sizeof(bridge));
 	for(int i=0;i<N;i++)
 		if(dfn[i] == -1)
 			_cut_bridge(i, -1, 0);

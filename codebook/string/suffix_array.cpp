@@ -2,7 +2,7 @@ vector<int> SuffixArray(const string& s){
 	int len = s.size();
 	int alpha = 256;
 	vector<int> cnt(alpha), rank(len), sa(len), tsa(len), tp[2];
-	tp[0] = tp[1] = vector<int>(0, len);
+	tp[0] = tp[1] = vector<int>(len, 0);
 	for(int i=0;i<len;i++)cnt[s[i] + 1]++;
 	for(int i=1;i<alpha;i++)cnt[i] += cnt[i - 1];
 	for(int i=0;i<len;i++)rank[i] = cnt[s[i]];

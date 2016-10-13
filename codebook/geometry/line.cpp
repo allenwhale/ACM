@@ -16,18 +16,18 @@ struct Line{
 	bool OnLine(const Point &rhs){
 		return cmp((rhs - b).Cross(a - b)) == 0;
 	}
-    bool OnSegment(const Point &rhs){
+	bool OnSegment(const Point &rhs){
 		return cmp((rhs - b).Cross(a - b)) == 0 && cmp((rhs - b).Dot(rhs - a)) <= 0;
-    }
+	}
 	bool Parallel(const Line &rhs){
 		return !cmp((a - b).Cross(rhs.a - rhs.b));
 	}
-    //for segment
+	//for segment
 	bool IsIntersect(const Line &rhs){
 		if(cmp((rhs.a - a).Cross(rhs.b - a) * (rhs.a - b).Cross(rhs.b - b)) > 0) 
-            return false;
+			return false;
 		if(cmp((a - rhs.a).Cross(b - rhs.a) * (a - rhs.b).Cross(b - rhs.b)) > 0) 
-            return false;
+			return false;
 		return true;
 	}
 	/* default is line */
@@ -47,7 +47,6 @@ struct Line{
 	Line Move(const double &d){
 		Point tmp = b - a;
 		tmp = tmp / tmp.Abs();
-		tmp = tmp.Rotate(PI / 2);
 		return Line(a + tmp * d, b + tmp * d);
 	}
 

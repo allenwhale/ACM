@@ -1,5 +1,5 @@
 Polygon ConvexHull(){
-    //it is clockwise
+	//it is clockwise
 	Polygon res, that = *this;
 	sort(that.s.begin(), that.s.end());
 	that.s.erase(unique(that.s.begin(), that.s.end()), that.s.end());
@@ -23,6 +23,6 @@ Polygon ConvexHull(){
 	res.N = w.size();
 	//res.A = vector<double>(res.N);
 	//for(int i=0;i<res.N;i++)
-		//res.A[i] = (res.s[(i + 1) % res.N] - res.s[i]).Arg();
+	//res.A[i] = (res.s[(i + 1) % res.N] - res.s[i]).Arg();
 	return res;
 }

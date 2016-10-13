@@ -3,14 +3,14 @@ using namespace std;
 template <class T>
 class SplayTree{ public:
 	class Node{ public:
-			Node *L, *R, *P;
-			T val;
-			int sz;
-			Node(const T &rhs=T()):
-				L(NULL), R(NULL), P(NULL), val(rhs), sz(1){}
-			void Up(){
-				sz = 1 + NodeSize(L) + NodeSize(R);
-			}
+		Node *L, *R, *P;
+		T val;
+		int sz;
+		Node(const T &rhs=T()):
+			L(NULL), R(NULL), P(NULL), val(rhs), sz(1){}
+		void Up(){
+			sz = 1 + NodeSize(L) + NodeSize(R);
+		}
 	};
 	static int NodeSize(Node *rhs){
 		return rhs?rhs->sz:0;
@@ -145,10 +145,10 @@ int main(){
 	const int size = 10;
 	const int time = 100000000;
 	SplayTree<int> s;
-    for(int i=0;i<10;i++)
-        s.Merge(SplayTree<int>(i));
-    s.Print();
-    SplayTree<int> a, b;
+	for(int i=0;i<10;i++)
+		s.Merge(SplayTree<int>(i));
+	s.Print();
+	SplayTree<int> a, b;
 	return 0;
 }
 

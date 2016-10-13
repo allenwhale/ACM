@@ -7,7 +7,7 @@ struct MEuler{
 	struct Edge{
 #define DIRECTED    1
 #define UNDIRECTED  0
-			int to, dir;
+		int to, dir;
 	};
 	int N;
 	Dinic dinic;
@@ -23,7 +23,7 @@ struct MEuler{
 		for(int i=0;i<N;i++)
 			if(abs(deg[i]) & 1) return false;
 		for(int i=0;i<N;i++)
-            for(Edge e:vc[i]){
+			for(Edge e:vc[i]){
 				if(e.dir == UNDIRECTED)
 					dinic.add_edge(i, e.to, 1);
 			}

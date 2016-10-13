@@ -2,9 +2,9 @@
 #define INF 1e9
 const double PI = acos(-1);
 int cmp(double x){
-    if(fabs(x) < EPS) return 0;
-    if(x > 0) return 1;
-    else return -1;
+	if(fabs(x) < EPS) return 0;
+	if(x > 0) return 1;
+	else return -1;
 }
 struct Point{
 	double x ,y;
@@ -63,8 +63,8 @@ struct Point{
 		return out;
 	}
 	Point& update(){
-        if(cmp(x) == 0) x = 0;
-        if(cmp(y) == 0) y = 0;
+		if(cmp(x) == 0) x = 0;
+		if(cmp(y) == 0) y = 0;
 		return *this;
 	}
 }nilPoint(INF, INF);

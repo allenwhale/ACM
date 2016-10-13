@@ -32,6 +32,6 @@ vector<Complex> FFT(const vector<Complex>& a, int flag=1){
 			}
 		}
 	}
-    if(flag == -1) for(auto &x:res) x /= (double)res.size();
+	if(flag == -1) for(auto &x:res) x /= (double)res.size();
 	return res;
 }

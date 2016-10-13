@@ -9,12 +9,12 @@ struct DisjointSet {
 	int N;
 	vector<int> p;
 	DisjointSet(int n): N(n), p(vector<int>(N)){
-        init();
+		init();
 	}
-    void init(){
+	void init(){
 		for(int i=0;i<N;i++)
 			p[i] = i;
-    }
+	}
 	int find(int x){
 		return p[x] == x ? x : p[x] = find(p[x]);
 	}
@@ -77,7 +77,7 @@ struct GMatch{
 		q.push(x);
 		while(!q.empty()){
 			int u = q.front(); q.pop();
-            for(int v:vc[u]){
+			for(int v:vc[u]){
 				if(m[v] != v && djs.find(u) != djs.find(v)){
 					if(d[v] == -1){
 						if(m[v] == -1){

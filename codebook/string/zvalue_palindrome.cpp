@@ -10,7 +10,7 @@ vector<int> zvaule_pali(const string& s1){
 		if(i > r){
 			l = r = i;
 			while(l > 0 && r < len2 - 1 && s2[l - 1] == s2[r + 1])
-                l--, r++;
+				l--, r++;
 			z[i] = r - l + 1;
 		}else{
 			z[i] = z[((l + r) & (~1)) - i];
@@ -18,7 +18,7 @@ vector<int> zvaule_pali(const string& s1){
 			if(nr == r){
 				l = i * 2 - r;
 				while(l > 0 && r < len2 - 1 && s2[l - 1] == s2[r + 1])
-                    l--, r++;
+					l--, r++;
 				z[i] = r - l + 1;
 			}else if(nr > r){
 				z[i] = (r - i) * 2 + 1;

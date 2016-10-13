@@ -29,7 +29,7 @@ struct RMST{
 		return a.w < b.w;
 	}
 	void dfs(int x, int p, int r){
-        for(PII e:vc[x]){
+		for(PII e:vc[x]){
 			if(choose[e.eid] && e.to != p){
 				if(x == r){
 					best[e.to] = -1;
@@ -50,7 +50,7 @@ struct RMST{
 		adj = vector<PI>(N+1, PI(INF, -1));
 		sort(E.begin(), E.end(), RMST::cmp);
 		int rmst = 0, m = 0;
-        for(PII e:E){
+		for(PII e:E){
 			vc[e.v1].push_back(PII(PI(e.v2, i), e.w));
 			vc[e.v2].push_back(PII(PI(e.v1, i), e.w));
 			if(e.v1 != r && e.v2 != r && djs.find(e.v1) != djs.find(e.v2)){
@@ -59,7 +59,7 @@ struct RMST{
 				rmst += e.w;
 			}
 		}
-        for(PII e:E){
+		for(PII e:E){
 			if(e.v1 == r || e.v2 == r){
 				int v = (e.v1 == r ? e.v2 : e.v1);
 				adj[v] = min(adj[v], PI(e.w, i));
