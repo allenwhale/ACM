@@ -137,20 +137,7 @@ int main(){
 	for(int i=0;i<10;i++){
 		root = Merge(root, new Treap(i));
 	}
-	print(root);
-	puts("");
-	Split(root, a, b, 5);
-	print(a);
-	puts("");
-	print(b);
-	puts("");
-	root = Merge(a, b);
-	Reverse(root, 5, 3);
-	print(root);
-	puts("");
-	Change(root, 3, 4, 10);
-	print(root);
-	puts("");
+	print(root); puts(""); Split(root, a, b, 5); print(a); puts(""); print(b); puts(""); root = Merge(a, b); Reverse(root, 5, 3); print(root); puts(""); Change(root, 3, 4, 10); print(root); puts("");
 
 	return 0;
 }
