@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using namespace std::placeholders;
-#define MAXN 5010
+#define MAXN (512 * 512)
 #define SQR(x) ((x) * (x))
 namespace KD {
     int degree = 2;
@@ -154,10 +154,9 @@ namespace KD {
 		GetTree(tr->R, v);
 	}
 	Node *Rebuild(Node *tr) {
-        int d = tr->d;
 		vector<Point> v;
 		GetTree(tr, v);
-		return Build(v.begin(), 0, v.size(), d);
+		return Build(v.begin(), 0, v.size(), 0);
 	}
 	Node **Insert(Node *&tr, const Point &p, int d) {
 		if(tr == nil) {
@@ -297,22 +296,43 @@ namespace KD {
 };
 
 int main(){
-    srand(time(0));
-	KD::Init();
-	vector<KD::Point> v;
-	for(int i=0;i<10;i++)
-		v.push_back({{rand()%200, rand()%200}, i});
-	puts("---origin---");
-	for(KD::Point p: v)
-		cout << p << endl;
-	KD::Node *root = KD::Build(v.begin(), 0, v.size(), 0);
-    KD::Print(root);
-	vector<KD::Point> u;
-	KD::GetRange(root, u, KD::Point({0, 0}), KD::Point({100, 100}));
-	puts("---range---");
-	for(KD::Point p: u)
-		cout << p << endl;
-	//KD::Print(root);
-	return 0;
+    KD::degree = 2;
+    KD::Init();
+    int N;
+    scanf("%d", &N);
+    vector<KD::Point> p(N * N);
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            p[i * N + j] = KD::Point({i, j}, i * N + j);
+        }
+    }
+    KD::Node *root = KD::Build(p.begin(), 0, p.size(), 0);
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            int x;
+            scanf("%d", &x);
+            Update(root, KD::Point({i, j}, i * N + j), 0, x);
+        }
+    }
+    int Q;
+    scanf("%d", &Q);
+    while(Q--){
+        char op[5];
+        scanf("%s", op);
+        if(op[0] == 'q'){
+            KD::T x1, y1, x2, y2;
+            scanf("%lld%lld%lld%lld", &x1, &y1, &x2, &y2);
+            x1--, x2--, y1--, y2--;
+            auto ans = KD::Query(root, KD::Point({x1, y1}), KD::Point({x2, y2}));
+            printf("%d %d\n", ans.second, ans.first);
+        }else if(op[0] == 'c'){
+            KD::T x, y;
+            int v;
+            scanf("%lld%lld%d", &x, &y, &v);
+            x--, y--;
+            KD::Update(root, KD::Point({x, y}, x * N + y), 0, v);
+        }
+    }
 }
+
 

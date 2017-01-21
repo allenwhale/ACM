@@ -1,17 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 using namespace std::placeholders;
-#define MAXN 5010
+#define MAXN 27000
 #define SQR(x) ((x) * (x))
 namespace KD {
-    int degree = 2;
+    const int degree = 2;
 	const double alpha = 0.75;
 	typedef long long T;
 	struct Point {
-		vector<T> d;
-		int index;
-		Point() {}
-		Point(const vector<T> &_d, int _i=-1): d(_d), index(_i) {}
+        T d[2];
+		long long index, data, gcdData;
+		Point(): index(-1) {}
+		Point(T x, T y, long long _i=-1): index(_i) {
+            d[0] = x, d[1] = y;
+        }
 		T distance(const Point &rhs) const {
 			T res = 0;
 			for(int i=0;i<degree;i++)
@@ -19,7 +21,7 @@ namespace KD {
 			return res;
 		}
 		bool operator == (const Point &rhs) const {
-			return index == rhs.index;
+			return index == rhs.index && rhs.d[0] == d[0] && rhs.d[1] == d[1];
 		}
 		bool operator != (const Point &rhs) const {
 			return !(index == rhs.index);
@@ -33,7 +35,7 @@ namespace KD {
 	};
 	ostream& operator << (ostream &o, const Point &rhs) {
 		o << "<" << rhs.index << ", (";
-		for(int i=0;i<(int)rhs.d.size();i++){
+		for(int i=0;i<degree;i++){
 			if(i) o << ", ";
 			o << rhs.d[i];
 		}
@@ -41,9 +43,12 @@ namespace KD {
 		return o;
 	}
 	bool cmp(int idx, const Point &a, const Point &b) {
+        if(a.d[idx] != b.d[idx])
+            return a.d[idx] < b.d[idx];
         for(int i=0;i<degree;i++){
-            if(a.d[(i + idx) % degree] != b.d[(i + idx) % degree])
-                return a.d[(i + idx) % degree] < b.d[(i + idx) % degree];
+            if(a.d[i] != b.d[i]){
+                return a.d[i] < b.d[i];
+            }
         }
         return a.index < b.index;
     }
@@ -53,7 +58,7 @@ namespace KD {
 		qNode(const Point &_p=Point(), T _d=0):p(_p), dis(_d) {}
 		bool operator < (const qNode &rhs) const {
 			if(dis != rhs.dis) return dis < rhs.dis;
-			return p.index < rhs.p.index;
+			return p.index <= rhs.p.index;
 		}
 	};
     struct Node;
@@ -62,26 +67,23 @@ namespace KD {
 		Point p, minNode, maxNode;
 		Node *L, *R;
 		int size, d;
-        int data, minData, maxData;
 		void pull(){
             size = L->size + R->size + 1;
             minNode = maxNode = p;
-            minData = maxData = data;
+            p.gcdData = p.data;
             if(L != nil){
                 for(int i=0;i<KD::degree;i++){
                     minNode.d[i] = min(minNode.d[i], L->minNode.d[i]);
                     maxNode.d[i] = max(maxNode.d[i], L->maxNode.d[i]);
                 }
-                minData = min(minData, L->minData);
-                maxData = max(maxData, L->maxData);
+                p.gcdData = __gcd(p.gcdData, L->p.gcdData);
             }
             if(R != nil){
                 for(int i=0;i<KD::degree;i++){
                     minNode.d[i] = min(minNode.d[i], R->minNode.d[i]);
                     maxNode.d[i] = max(maxNode.d[i], R->maxNode.d[i]);
                 }
-                minData = min(minData, R->minData);
-                maxData = max(maxData, R->maxData);
+                p.gcdData = __gcd(p.gcdData, R->p.gcdData);
             }
         }
 		bool isbad(){
@@ -122,7 +124,7 @@ namespace KD {
 		if(tr == nil) return;
 		Print(tr->R, d + 1);
 		for(int i=0;i<d;i++) printf(" ");
-		cout << tr->p << " " << tr->minData << " " << tr->maxData << " " << tr->data << endl;
+		cout << tr->p << " " << tr->p.gcdData << " " << tr->p.data << endl;
 		Print(tr->L, d + 1);
 	}
 	Node *New(const Point &p, int d) {
@@ -141,8 +143,8 @@ namespace KD {
 		int mid = (l + r) >> 1;
 		nth_element(p + l, p + mid, p + r, bind(cmp, d, _1, _2));
 		Node *n = New(p[mid], d);
-		n->L = Build(p, l, mid, (d + 1) % degree);
-		n->R = Build(p, mid + 1, r, (d + 1) % degree);
+		n->L = Build(p, l, mid, (d ^ 1));
+		n->R = Build(p, mid + 1, r, (d ^ 1));
 		n->pull();
 		return n;
 	}
@@ -156,24 +158,28 @@ namespace KD {
 	Node *Rebuild(Node *tr) {
         int d = tr->d;
 		vector<Point> v;
+        v.reserve(tr->size);
 		GetTree(tr, v);
 		return Build(v.begin(), 0, v.size(), d);
 	}
 	Node **Insert(Node *&tr, const Point &p, int d) {
 		if(tr == nil) {
 			tr = New(p, d);
+            tr->pull();
 			return &nil;
 		}
 		Node **res;
-		if(cmp(d, p, tr->p)) res = Insert(tr->L, p, (d + 1) % degree);
-		else res = Insert(tr->R, p, (d + 1) % degree);
+		if(cmp(d, p, tr->p)) res = Insert(tr->L, p, (d ^ 1));
+		else res = Insert(tr->R, p, (d ^ 1));
 		tr->pull();
 		if(tr->isbad())res = &tr;
 		return res;
 	}
 	void Insert(Node *&tr, const Point &p) {
 		Node **bad = Insert(tr, p, 0);
-		if(bad != &nil) *bad = Rebuild(*bad);
+		if(bad != &nil){
+            *bad = Rebuild(*bad);
+        }
 	}
 	Node *GetMin(Node *tr, int d) {
 		if(tr->d == d){
@@ -255,36 +261,44 @@ namespace KD {
 		Search(tr, p, 0, m);
 	}
 
-    void Update(Node *tr, const Point &p, int d, int data) {
-        if(tr->p == p){
-            tr->data = data;
+    bool Update(Node *&tr, const Point &p, int d, long long data) {
+        if(tr == nil){
+            tr = New(p, d);
+            tr->p.data = data;
             tr->pull();
-            return;
+            return 1;
         }
-        if(cmp(d, p, tr->p))
-            Update(tr->L, p, (d + 1) % degree, data);
-        else
-            Update(tr->R, p, (d + 1) % degree, data);
+        if(tr->p == p){
+            tr->p.data = data;
+            tr->pull();
+            return 0;
+        }
+        if(Update(cmp(d, p, tr->p) ? tr->L : tr->R, p, (d ^ 1), data)){
+            if(!tr->isbad()){
+                tr->pull();
+                return 1;
+            }
+            tr = Rebuild(tr);
+        }
         tr->pull();
+        return 0;
     }
-    pair<int, int> Query(Node *tr, const Point &L, const Point &R){
-        if(tr->range_in_range(L, R)){
-            return {tr->minData, tr->maxData};
+    long long Query(Node *tr, const Point &L, const Point &R){
+        if(tr == nil){
+            return 0;
         }
-        pair<int, int> res = {INT_MAX, INT_MIN};
+        if(tr->range_in_range(L, R)){
+            return tr->p.gcdData;
+        }
+        long long res = 0;
         if(tr->point_in_range(L, R)){
-            res.first = min(res.first, tr->data);
-            res.second = max(res.second, tr->data);
+            res = tr->p.data;
         }
         if(tr->L != nil && tr->L->range_include(L, R)){
-            auto childRes = Query(tr->L, L, R);
-            res.first = min(res.first, childRes.first);
-            res.second = max(res.second, childRes.second);
+            res = __gcd(res, Query(tr->L, L, R));
         }
         if(tr->R != nil && tr->R->range_include(L, R)){
-            auto childRes = Query(tr->R, L, R);
-            res.first = min(res.first, childRes.first);
-            res.second = max(res.second, childRes.second);
+            res = __gcd(res, Query(tr->R, L, R));
         }
         return res;
     }
@@ -297,22 +311,26 @@ namespace KD {
 };
 
 int main(){
-    srand(time(0));
-	KD::Init();
-	vector<KD::Point> v;
-	for(int i=0;i<10;i++)
-		v.push_back({{rand()%200, rand()%200}, i});
-	puts("---origin---");
-	for(KD::Point p: v)
-		cout << p << endl;
-	KD::Node *root = KD::Build(v.begin(), 0, v.size(), 0);
-    KD::Print(root);
-	vector<KD::Point> u;
-	KD::GetRange(root, u, KD::Point({0, 0}), KD::Point({100, 100}));
-	puts("---range---");
-	for(KD::Point p: u)
-		cout << p << endl;
-	//KD::Print(root);
+    long long R, C;
+    int N;
+    scanf("%lld%lld%d", &R, &C, &N);;
+    KD::Init();
+    KD::Node *root = KD::nil;
+    unordered_set<KD::T> p;
+    while(N--){
+        int op;
+        scanf("%d", &op);
+        if(op == 1){
+            long long x, y, v;
+            scanf("%lld%lld%lld", &x, &y, &v);
+            KD::Update(root, KD::Point(x, y, x * C + y), 0, v);
+        }else if(op == 2){
+            long long x1, y1, x2, y2;
+            scanf("%lld%lld%lld%lld", &x1, &y1, &x2, &y2);
+            printf("%lld\n", KD::Query(root, KD::Point({x1, y1}), KD::Point({x2, y2})));
+        }
+    }
 	return 0;
 }
+
 

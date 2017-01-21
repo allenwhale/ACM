@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using namespace std::placeholders;
-#define MAXN 5010
+#define MAXN 1000010
 #define SQR(x) ((x) * (x))
 namespace KD {
     int degree = 2;
@@ -62,11 +62,15 @@ namespace KD {
 		Point p, minNode, maxNode;
 		Node *L, *R;
 		int size, d;
-        int data, minData, maxData;
+        int data, minData, maxData, sumData;
+        int lazySet, lazyAdd;
 		void pull(){
+            push();
+            if(L != nil)L->push();
+            if(R != nil)R->push();
             size = L->size + R->size + 1;
             minNode = maxNode = p;
-            minData = maxData = data;
+            minData = maxData = sumData = data;
             if(L != nil){
                 for(int i=0;i<KD::degree;i++){
                     minNode.d[i] = min(minNode.d[i], L->minNode.d[i]);
@@ -74,6 +78,7 @@ namespace KD {
                 }
                 minData = min(minData, L->minData);
                 maxData = max(maxData, L->maxData);
+                sumData += L->sumData;
             }
             if(R != nil){
                 for(int i=0;i<KD::degree;i++){
@@ -82,12 +87,48 @@ namespace KD {
                 }
                 minData = min(minData, R->minData);
                 maxData = max(maxData, R->maxData);
+                sumData += R->sumData;
+            }
+        }
+        void push(){
+            if(lazySet){
+                data = minData = maxData = lazySet;
+                sumData = lazySet * size;
+                if(L != nil){
+                    L->lazySet = lazySet;
+                    L->lazyAdd = 0;
+                }
+                if(R != nil){
+                    R->lazySet = lazySet;
+                    R->lazyAdd = 0;
+                }
+                lazySet = 0;
+            }
+            if(lazyAdd){
+                data += lazyAdd;
+                minData += lazyAdd;
+                maxData += lazyAdd;
+                sumData += lazyAdd * size;
+                if(L != nil){
+                    L->lazyAdd += lazyAdd;
+                }
+                if(R != nil){
+                    R->lazyAdd += lazyAdd;
+                }
+                lazyAdd = 0;
             }
         }
 		bool isbad(){
 			return max(L->size , R->size) > alpha * size;
 		}
-
+        void Print(int d=0) {
+            if(this == nil) return;
+            push();
+            R->Print(d + 1);
+            for(int i=0;i<d;i++) printf(" ");
+            cout << this->p << " " << this->minData << " " << this->maxData << " " << this->sumData << " " << this->data << endl;
+            L->Print(d + 1);
+        }
         bool range_include(const Point &L, const Point &R) {
             for(int i=0;i<degree;i++){
                 if(!(L.d[i] <= maxNode.d[i] && minNode.d[i] <= R.d[i]))
@@ -118,14 +159,7 @@ namespace KD {
 		nil->size = 0;
 		rc_cnt = 0;
 	}
-	void Print(Node *tr, int d=0) {
-		if(tr == nil) return;
-		Print(tr->R, d + 1);
-		for(int i=0;i<d;i++) printf(" ");
-		cout << tr->p << " " << tr->minData << " " << tr->maxData << " " << tr->data << endl;
-		Print(tr->L, d + 1);
-	}
-	Node *New(const Point &p, int d) {
+	Node *New(const Point &p, int d, int data=0) {
 		Node *n;
 		if(rc_cnt) n = recycle[--rc_cnt];
 		else n = tail++;
@@ -133,6 +167,8 @@ namespace KD {
 		n->size = 1;
 		n->p = p;
 		n->d = d;
+        n->data = n->minData = n->maxData = data;
+        n->lazyAdd = n->lazySet = 0;
 		return n;
 	}
     void Free(Node *tr){ recycle[rc_cnt++] = tr; }
@@ -154,10 +190,9 @@ namespace KD {
 		GetTree(tr->R, v);
 	}
 	Node *Rebuild(Node *tr) {
-        int d = tr->d;
 		vector<Point> v;
 		GetTree(tr, v);
-		return Build(v.begin(), 0, v.size(), d);
+		return Build(v.begin(), 0, v.size(), 0);
 	}
 	Node **Insert(Node *&tr, const Point &p, int d) {
 		if(tr == nil) {
@@ -254,8 +289,8 @@ namespace KD {
 		while(pq.size()) pq.pop();
 		Search(tr, p, 0, m);
 	}
-
     void Update(Node *tr, const Point &p, int d, int data) {
+        tr->push();
         if(tr->p == p){
             tr->data = data;
             tr->pull();
@@ -267,7 +302,31 @@ namespace KD {
             Update(tr->R, p, (d + 1) % degree, data);
         tr->pull();
     }
+    void UpdateRange(Node *tr, const Point &L, const Point &R, int op, int data) {
+        tr->push();
+        if(tr->range_in_range(L, R)){
+            if(op == 0){ // set
+                tr->lazySet = data;
+            }else if(op == 1){ //add
+                tr->lazyAdd += data;
+            }
+            return;
+        }
+        if(tr->point_in_range(L, R)){
+            if(op == 0){ // set
+                tr->data = data;
+            }else if(op == 1){ //add
+                tr->data += data;
+            }
+        }
+        if(tr->L != nil && tr->L->range_include(L, R))
+            UpdateRange(tr->L, L, R, op, data);
+        if(tr->R != nil && tr->R->range_include(L, R))
+            UpdateRange(tr->R, L, R, op, data);
+        tr->pull();
+    }
     pair<int, int> Query(Node *tr, const Point &L, const Point &R){
+        tr->push();
         if(tr->range_in_range(L, R)){
             return {tr->minData, tr->maxData};
         }
@@ -288,6 +347,31 @@ namespace KD {
         }
         return res;
     }
+    tuple<int, int, int> QueryRange(Node *tr, const Point &L, const Point &R) {
+        tr->push();
+        if(tr->range_in_range(L, R)){
+            return make_tuple(tr->minData, tr->maxData, tr->sumData);
+        }
+        tuple<int, int, int> res = make_tuple(INT_MAX, INT_MIN, 0);
+        if(tr->point_in_range(L, R)){
+            get<0>(res) = min(get<0>(res), tr->data);
+            get<1>(res) = max(get<1>(res), tr->data);
+            get<2>(res) += tr->data;
+        }
+        if(tr->L != nil && tr->L->range_include(L, R)){
+            auto childRes = QueryRange(tr->L, L, R);
+            get<0>(res) = min(get<0>(res), get<0>(childRes));
+            get<1>(res) = max(get<1>(res), get<1>(childRes));
+            get<2>(res) += get<2>(childRes);
+        }
+        if(tr->R != nil && tr->R->range_include(L, R)){
+            auto childRes = QueryRange(tr->R, L, R);
+            get<0>(res) = min(get<0>(res), get<0>(childRes));
+            get<1>(res) = max(get<1>(res), get<1>(childRes));
+            get<2>(res) += get<2>(childRes);
+        }
+        return res;
+    }
 	void GetRange(Node *tr, vector<Point> &v, const Point &p1, const Point &p2) {
 		if(tr == nil) return;
         if(p1 <= tr->p && tr->p <= p2) v.push_back(tr->p);
@@ -297,22 +381,36 @@ namespace KD {
 };
 
 int main(){
-    srand(time(0));
-	KD::Init();
-	vector<KD::Point> v;
-	for(int i=0;i<10;i++)
-		v.push_back({{rand()%200, rand()%200}, i});
-	puts("---origin---");
-	for(KD::Point p: v)
-		cout << p << endl;
-	KD::Node *root = KD::Build(v.begin(), 0, v.size(), 0);
-    KD::Print(root);
-	vector<KD::Point> u;
-	KD::GetRange(root, u, KD::Point({0, 0}), KD::Point({100, 100}));
-	puts("---range---");
-	for(KD::Point p: u)
-		cout << p << endl;
-	//KD::Print(root);
-	return 0;
+    KD::degree = 2;
+    KD::Init();
+    int R, C, M;
+    scanf("%d%d%d", &R, &C, &M);
+    vector<KD::Point> p(R * C);
+    for(int i=0;i<R;i++){
+        for(int j=0;j<C;j++){
+            p[i * C + j] = KD::Point({i, j}, i * C + j);
+        }
+    }
+    KD::Node *root = KD::Build(p.begin(), 0, p.size(), 0);
+    while(M--){
+        int op;
+        KD::T x1, y1, x2, y2;
+        scanf("%d%lld%lld%lld%lld", &op, &x1, &y1, &x2, &y2);
+        x1--, x2--, y1--, y2--;
+        if(op == 1){ //add
+            int v;
+            scanf("%d", &v);
+            KD::UpdateRange(root, KD::Point({x1, y1}), KD::Point({x2, y2}), 1, v);
+        }else if(op == 2){ //set
+            int v;
+            scanf("%d", &v);
+            KD::UpdateRange(root, KD::Point({x1, y1}), KD::Point({x2, y2}), 0, v);
+        }else if(op == 3){ //query
+            auto ans = KD::QueryRange(root, KD::Point({x1, y1}), KD::Point({x2, y2}));
+            printf("%d %d %d\n", get<2>(ans), get<0>(ans), get<1>(ans));
+        }
+        //root->Print();
+    }
 }
+
 

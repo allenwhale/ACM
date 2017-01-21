@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using namespace std::placeholders;
-#define MAXN 5010
+#define MAXN 100010
 #define SQR(x) ((x) * (x))
 namespace KD {
     int degree = 2;
@@ -56,60 +56,15 @@ namespace KD {
 			return p.index < rhs.p.index;
 		}
 	};
-    struct Node;
-    Node *nil;
 	struct Node {
-		Point p, minNode, maxNode;
+		Point p;
 		Node *L, *R;
 		int size, d;
-        int data, minData, maxData;
-		void pull(){
-            size = L->size + R->size + 1;
-            minNode = maxNode = p;
-            minData = maxData = data;
-            if(L != nil){
-                for(int i=0;i<KD::degree;i++){
-                    minNode.d[i] = min(minNode.d[i], L->minNode.d[i]);
-                    maxNode.d[i] = max(maxNode.d[i], L->maxNode.d[i]);
-                }
-                minData = min(minData, L->minData);
-                maxData = max(maxData, L->maxData);
-            }
-            if(R != nil){
-                for(int i=0;i<KD::degree;i++){
-                    minNode.d[i] = min(minNode.d[i], R->minNode.d[i]);
-                    maxNode.d[i] = max(maxNode.d[i], R->maxNode.d[i]);
-                }
-                minData = min(minData, R->minData);
-                maxData = max(maxData, R->maxData);
-            }
-        }
+		void pull(){ size = L->size + R->size + 1; }
 		bool isbad(){
 			return max(L->size , R->size) > alpha * size;
 		}
-
-        bool range_include(const Point &L, const Point &R) {
-            for(int i=0;i<degree;i++){
-                if(!(L.d[i] <= maxNode.d[i] && minNode.d[i] <= R.d[i]))
-                    return false;
-            }
-            return true;
-        }
-        bool range_in_range(const Point &L, const Point &R) {
-            for(int i=0;i<degree;i++){
-                if(!(L.d[i] <= minNode.d[i] && maxNode.d[i] <= R.d[i]))
-                    return false;
-            }
-            return true;
-        }
-        bool point_in_range(const Point &L, const Point &R) {
-            for(int i=0;i<degree;i++){
-                if(!(L.d[i] <= p.d[i] && p.d[i] <= R.d[i]))
-                    return false;
-            }
-            return true;
-        }
-	}pool[MAXN], *tail, *recycle[MAXN];
+	}*nil, pool[MAXN], *tail, *recycle[MAXN];
 	int rc_cnt;
 	void Init() {
 		tail = pool;
@@ -122,7 +77,7 @@ namespace KD {
 		if(tr == nil) return;
 		Print(tr->R, d + 1);
 		for(int i=0;i<d;i++) printf(" ");
-		cout << tr->p << " " << tr->minData << " " << tr->maxData << " " << tr->data << endl;
+		cout << tr->p << endl;
 		Print(tr->L, d + 1);
 	}
 	Node *New(const Point &p, int d) {
@@ -154,10 +109,9 @@ namespace KD {
 		GetTree(tr->R, v);
 	}
 	Node *Rebuild(Node *tr) {
-        int d = tr->d;
 		vector<Point> v;
 		GetTree(tr, v);
-		return Build(v.begin(), 0, v.size(), d);
+		return Build(v.begin(), 0, v.size(), 0);
 	}
 	Node **Insert(Node *&tr, const Point &p, int d) {
 		if(tr == nil) {
@@ -254,40 +208,6 @@ namespace KD {
 		while(pq.size()) pq.pop();
 		Search(tr, p, 0, m);
 	}
-
-    void Update(Node *tr, const Point &p, int d, int data) {
-        if(tr->p == p){
-            tr->data = data;
-            tr->pull();
-            return;
-        }
-        if(cmp(d, p, tr->p))
-            Update(tr->L, p, (d + 1) % degree, data);
-        else
-            Update(tr->R, p, (d + 1) % degree, data);
-        tr->pull();
-    }
-    pair<int, int> Query(Node *tr, const Point &L, const Point &R){
-        if(tr->range_in_range(L, R)){
-            return {tr->minData, tr->maxData};
-        }
-        pair<int, int> res = {INT_MAX, INT_MIN};
-        if(tr->point_in_range(L, R)){
-            res.first = min(res.first, tr->data);
-            res.second = max(res.second, tr->data);
-        }
-        if(tr->L != nil && tr->L->range_include(L, R)){
-            auto childRes = Query(tr->L, L, R);
-            res.first = min(res.first, childRes.first);
-            res.second = max(res.second, childRes.second);
-        }
-        if(tr->R != nil && tr->R->range_include(L, R)){
-            auto childRes = Query(tr->R, L, R);
-            res.first = min(res.first, childRes.first);
-            res.second = max(res.second, childRes.second);
-        }
-        return res;
-    }
 	void GetRange(Node *tr, vector<Point> &v, const Point &p1, const Point &p2) {
 		if(tr == nil) return;
         if(p1 <= tr->p && tr->p <= p2) v.push_back(tr->p);
@@ -296,23 +216,32 @@ namespace KD {
 	}
 };
 
+void Solve(){
+    int N;
+    scanf("%d", &N);
+    KD::degree = 2;
+    KD::Init();
+    vector<KD::Point> p(N);
+    for(int i=0;i<N;i++){
+        KD::T x, y;
+        scanf("%lld%lld", &x, &y);
+        p[i] = KD::Point({x, y}, i);
+    }
+    KD::Node *root = KD::Build(p.begin(), 0, p.size(), 0);
+    vector<KD::T> ans(N);
+    for(auto x : p){
+        KD::Search(root, x, 1);
+        ans[x.index] = KD::pq.top().dis;
+    }
+    for(auto x : ans)
+        printf("%lld\n", x);
+}
+
 int main(){
-    srand(time(0));
-	KD::Init();
-	vector<KD::Point> v;
-	for(int i=0;i<10;i++)
-		v.push_back({{rand()%200, rand()%200}, i});
-	puts("---origin---");
-	for(KD::Point p: v)
-		cout << p << endl;
-	KD::Node *root = KD::Build(v.begin(), 0, v.size(), 0);
-    KD::Print(root);
-	vector<KD::Point> u;
-	KD::GetRange(root, u, KD::Point({0, 0}), KD::Point({100, 100}));
-	puts("---range---");
-	for(KD::Point p: u)
-		cout << p << endl;
-	//KD::Print(root);
+    int T;
+    scanf("%d", &T);
+    while(T--)Solve();
 	return 0;
 }
+
 
