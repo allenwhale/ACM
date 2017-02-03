@@ -8,19 +8,19 @@ struct KM{
 #define SS second
 #define INF 0x3f3f3f3f
 	typedef pair<int, int> PI;
-	int Nx, Ny;
+	int N;
 	vector<vector<int> >mp;
 	vector<int> visx, visy;
 	vector<int> lx, ly, slack;
 	vector<int> mx, my;
-	KM(int x=0, int y=0): Nx(x), Ny(y), mp(vector<vector<int> >(Nx+1, vector<int>(Ny+1, 0))) {}
+	KM(int n): N(n), mp(vector<vector<int> >(N+1, vector<int>(N+1, 0))) {}
 	void add(int x, int y, int w){
 		mp[x][y] = w;
 	}
 
 	bool Match(int x){
 		visx[x] = 1;
-		for(int i=0;i<Ny;i++){
+		for(int i=0;i<N;i++){
 			int y = i;
 			if(visy[y]) continue;
 			int tmp = lx[x] + ly[y] - mp[x][y];
@@ -38,35 +38,35 @@ struct KM{
 	}
 
 	int Solve(){
-		mx = vector<int>(Nx+1, -1);
-		my = vector<int>(Ny+1, -1);
-		lx = vector<int>(Nx+1, -INF);
-		ly = vector<int>(Ny+1, 0);
-		slack = vector<int>(Ny+1, INF);
-		visx = vector<int>(Nx+1, 0);
-		visy = vector<int>(Ny+1, 0);
-		for(int i=0;i<Nx;i++)
-			for(int j=0;j<Ny;j++)
+		mx = vector<int>(N+1, -1);
+		my = vector<int>(N+1, -1);
+		lx = vector<int>(N+1, -INF);
+		ly = vector<int>(N+1, 0);
+		slack = vector<int>(N+1, INF);
+		visx = vector<int>(N+1, 0);
+		visy = vector<int>(N+1, 0);
+		for(int i=0;i<N;i++)
+			for(int j=0;j<N;j++)
 				lx[i] = max(lx[i], mp[i][j]);
-		for(int i=0;i<Nx;i++){
+		for(int i=0;i<N;i++){
 			fill(slack.begin(), slack.end(), INF);
 			while(true){
 				fill(visx.begin(), visx.end(), 0);
 				fill(visy.begin(), visy.end(), 0);
 				if(Match(i)) break;
 				int d = INF;
-				for(int j=0;j<Ny;j++)
+				for(int j=0;j<N;j++)
 					if(!visy[j]) d = min(d, slack[j]);
 				if(d == INF)break;
-				for(int i=0;i<Nx;i++)
+				for(int i=0;i<N;i++)
 					if(visx[i]) lx[i] -= d;
-				for(int i=0;i<Ny;i++)
+				for(int i=0;i<N;i++)
 					if(visy[i]) ly[i] += d;
 					else slack[i] -= d;
 			}
 		}
 		int res = 0;
-		for(int i=0;i<Nx;i++)
+		for(int i=0;i<N;i++)
 			if(mx[i] != -1)
 				res += mp[i][mx[i]];
 		return res;

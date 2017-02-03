@@ -19,6 +19,9 @@ Circle Center(const Point &rhs1, const Point &rhs2, const Point &rhs3){
 	return res;
 }
 Circle MinCircleCover(vector<Point> rhs){
+    //to remove duplicated points
+    sort(rhs.begin(), rhs.end());
+    rhs.resize(unique(rhs.begin(), rhs.end()) - rhs.begin());
 	random_shuffle(rhs.begin(), rhs.end());
 	Circle res(rhs[0], 0);
 	for(int i=1;i<(int)rhs.size();i++){
