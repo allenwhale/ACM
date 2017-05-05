@@ -6,6 +6,7 @@ typedef __gnu_pbds::tree<int, null_type,
 		less<int>, rb_tree_tag, 
 		tree_order_statistics_node_update> set_t;
 typedef __gnu_pbds::priority_queue<int> heap_t;
+cc_hash_table<int, int> umap;
 int main(){
 	set_t s;
 	s.insert(10); s.insert(20);
