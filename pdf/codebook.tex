@@ -9,8 +9,9 @@
 \usepackage{fontspec}
 \usepackage{color}
 \usepackage[x11names]{xcolor}
+\usepackage{xeCJK}
 \usepackage{CJKutf8} 
-\usepackage{amsmath, courier, listings, fancyhdr, graphicx}
+\usepackage{amsmath, courier, listings, fancyhdr, graphicx, pdfpages}
 %\topmargin=0pt
 \headsep=5pt
 \textheight=740pt
@@ -130,10 +131,10 @@
     \section{Graph}
     %\subsection{Bridge And Cut}
     %\lstinputlisting{./../codebook/graph/cut_bridge.cpp}
-    %\subsection{BCC}
-    %\lstinputlisting{./../codebook/graph/bcc.cpp}
-    %\subsection{SCC}
-    %\lstinputlisting{./../codebook/graph/scc.cpp}
+    \subsection{BCC}
+    \lstinputlisting{./../codebook/graph/bcc.cpp}
+    \subsection{SCC}
+    \lstinputlisting{./../codebook/graph/scc.cpp}
     %\subsection{Two Sat}
     %\lstinputlisting{./../codebook/graph/twosat.cpp}
     \subsection{Maximal Clique}
@@ -158,6 +159,8 @@
     %\newpage
 
     \section{Match}
+    \subsection{Match}
+    \input{./../codebook/graph/match.tex}
     \subsection{BiMatch}
     \lstinputlisting{./../codebook/graph/bimatch.cpp}
     \subsection{KM}
@@ -209,6 +212,8 @@
     \lstinputlisting{./../codebook/geometry/halfplane_set.cpp}
     \subsection{Closest Pair}
     \lstinputlisting{./../codebook/geometry/closest_pair.cpp}
+    \subsection{Geometric Median}
+    \lstinputlisting{./../codebook/geometry/geometric_median.cpp}
     %\newpage
 
     \section{Data Structure}
@@ -234,13 +239,20 @@
     \subsection{Suffix Automaton}
     \lstinputlisting{./../codebook/string/sam.cpp}
     %\newpage
-    \section{SAT}
+    \section{Misc}
+    \subsection{SAT}
     \lstinputlisting{./../codebook/misc/sat.cpp}
-    \section{有限背包}
+    \subsection{有限背包}
     \lstinputlisting{./../codebook/misc/limited_pack.cpp}
+    \subsection{Nim Misère}
+    \input{./../codebook/misc/nim_misere.tex}
+	\newpage
 
     %\section{Treap}
     %\lstinputlisting{./../codebook/ds/treap.cpp}
 	\newpage
+    %\includepdf{./../codebook/math/number/calculus.pdf}
+    \centering
+    \includegraphics[height=\paperheight]{./../codebook/math/number/calculus.jpg}
 
     \end{document}
